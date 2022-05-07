@@ -111,7 +111,7 @@ Her laver du så standard linux privesc enum, jeg plejer at bruge linpeas. https
 
 Herfra finder du så ud af at `nmap` er installeret på maskinen med `setuid` bit på.
 
-![revshell](/assets/setuid.jpg)
+![revshell](/assets/setuid.JPG)
 
 Det betyder at vi kan køre nmap som root brugeren. 
 
