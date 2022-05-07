@@ -65,7 +65,7 @@ Ok sick nok, vi kan se at `vsftpd 2.3.4` kører. lad os lige prøve at hurtigt g
 
 
 
-![vsftpd](/assets/vsftpdbackdoor.jpg)
+![vsftpd](/assets/vsftpdbackdoor.JPG)
 
 
 ok det virker som om der er en bagdør i den her version, hvis vi læser lidt på nr 2 link, så kan vi se hvad det går ud på. Scriptet fra exploit-db ser således ud.
