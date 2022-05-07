@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "DDC 2022 'afstiafsted' Writeup"
-date:   2022-05-07 16:17:46 +0200
+date:   2022-05-07 16:17:42 +0200
 categories: writeups
 ---
 # Afsti afsted
