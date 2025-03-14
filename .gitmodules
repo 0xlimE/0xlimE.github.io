@@ -1,3 +1,6 @@
 [submodule "themes/yinyang"]
 	path = themes/yinyang
 	url = https://github.com/joway/hugo-theme-yinyang
+[submodule "themes/typo"]
+	path = themes/typo
+	url = https://github.com/tomfran/typo

@@ -1,7 +1,7 @@
 baseURL = 'http://example.org/'
 languageCode = 'en-us'
 title = '0xlime Blog'
-theme = "yinyang"
+theme = "typo"
 
 [markup]
   [markup.goldmark]
@@ -20,22 +20,47 @@ theme = "yinyang"
     weight = 1
 
 [params]
-  # Moved author information here
+  # Author information
   author = "0xlime"
-  authorHomepage = "https://blog.r4.dk/"
+  bio = "Security Researcher"
+  location = ""
 
+  # Site description
+  description = "wow another security research blog"
+
+  # Site header/footer
   mainSections = ["posts"]
-  headTitle = "0xlime blog posts"
-  # extraHead = '<script async src="#"></script>'
-  postHeaderContent = ""
-  postFooterContent = "<br/><br/><p>Subscribe to：<a target='_blank' href='#y'>0xlime</a></p>"
-  # extraCSSFiles = ["css/foo.css", "css/bar.css"]
-  extraCSSFiles = []
+  favicon = "favicon.ico"
 
-[[params.socials]]
-name = "About Me"
-link = "https://r4.dk"
+  # Social links
+  github = "https://github.com/0xlime"
+  twitter = ""
+  linkedin = "https://www.linkedin.com/in/emil-h%C3%B8rning-8824641b4/"
+  email = ""
 
-[[params.socials]]
-name = "Github"
-link = "https://github.com/0xlime"
+  # Other customization
+  customCSS = []
+  customJS = []
+
+  # Enable dark mode
+  enableDarkMode = false
+
+  # Copyright notice
+  copyright = "© 2025 0xlime"
+
+  # Google Analytics (optional)
+  # googleAnalytics = "UA-XXXXXXXX-X"
+
+# Menu items
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 1
+
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "https://r4.dk"
+    weight = 2
