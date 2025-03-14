@@ -1,17 +1,13 @@
-baseURL = 'http://example.org/'
+baseURL = 'https://example.org/'
 languageCode = 'en-us'
 title = '0xlime Blog'
-theme = "typo"
+theme = 'typo'
 
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
-  [markup.highlight]
-    guessSyntax = true
-    noClasses = true
-    style = "bw"
-    tabWidth = 2
+# Google analytics code
+googleAnalytics = ""
+
+[taxonomies]
+tag = 'tags'
 
 [languages]
   [languages.en]
@@ -20,47 +16,75 @@ theme = "typo"
     weight = 1
 
 [params]
-  # Author information
-  author = "0xlime"
-  bio = "Security Researcher"
-  location = ""
+# Meta description
+description = "Security Research and Bug Hunting"
 
-  # Site description
-  description = "wow another security research blog"
+# Appearance settings
+theme = 'auto'
+colorPalette = 'default'
+hideHeader = false
 
-  # Site header/footer
-  mainSections = ["posts"]
-  favicon = "favicon.ico"
+# Intro on main page, content is markdown
+homeIntroTitle = 'Welcome to 0xlime Blog!'
+homeIntroContent = """
+Security Researcher and Bug Hunter sharing insights on cybersecurity, 
+vulnerability research, and ethical hacking techniques.
+"""
 
-  # Social links
-  github = "https://github.com/0xlime"
-  twitter = ""
-  linkedin = "https://www.linkedin.com/in/emil-h%C3%B8rning-8824641b4/"
-  email = ""
+# Collection to display on home
+homeCollectionTitle = 'Posts'
+homeCollection = 'posts'
 
-  # Other customization
-  customCSS = []
-  customJS = []
+# Lists parameters
+paginationSize = 100
+listSummaries = true
+listDateFormat = '2 Jan 2006'
 
-  # Enable dark mode
-  enableDarkMode = false
+# Breadcrumbs
+breadcrumbs = true
 
-  # Copyright notice
-  copyright = "© 2025 0xlime"
+# Author information
+author = "0xlime"
 
-  # Google Analytics (optional)
-  # googleAnalytics = "UA-XXXXXXXX-X"
+# Social icons
+[[params.social]]
+name = "github"
+url = "https://github.com/0xlime"
 
-# Menu items
-[menu]
-  [[menu.main]]
-    identifier = "posts"
-    name = "Posts"
-    url = "/posts/"
-    weight = 1
+[[params.social]]
+name = "link"
+url = "https://r4.dk"
 
-  [[menu.main]]
-    identifier = "about"
-    name = "About"
-    url = "https://r4.dk"
-    weight = 2
+# Main menu pages
+[[params.menu]]
+name = "home"
+url = "/"
+
+[[params.menu]]
+name = "posts"
+url = "/posts"
+
+[[params.menu]]
+name = "about"
+url = "https://r4.dk"
+
+# Syntax highlight on code blocks
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = 'monokai'
+    guessSyntax = true
+    noClasses = true
+    tabWidth = 2
+
+# Giscus comments
+[params.giscus]
+enable = false
+repo = ""
+repoid = ""
+category = "General"
+categoryid = ""
+mapping = "pathname"
+theme = "preferred_color_scheme"
