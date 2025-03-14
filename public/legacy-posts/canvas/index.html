@@ -1,0 +1,204 @@
+<!doctype html> <html lang="en-US"> <head>     <meta charset="UTF-8">     <meta name="viewport" content="width=device-width, initial-scale=1">     <link rel="profile" href="https://gmpg.org/xfn/11">  	<title>Hackthebox Challenge &#8211; Canvas &#8211; 0xlimE Writeup blog</title> <meta name='robots' content='max-image-preview:large' /> <link rel='dns-prefetch' href='//s.w.org' /> <link href='https://fonts.gstatic.com' crossorigin rel='preconnect' /> <link rel="alternate" type="application/rss+xml" title="0xlimE Writeup blog &raquo; Feed" href="/" /> <link rel="alternate" type="application/rss+xml" title="0xlimE Writeup blog &raquo; Comments Feed" href="/" /> 		<script>
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/0xli.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.8.2"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script> 		<style> img.wp-smiley, img.emoji { 	display: inline !important; 	border: none !important; 	box-shadow: none !important; 	height: 1em !important; 	width: 1em !important; 	margin: 0 .07em !important; 	vertical-align: -0.1em !important; 	background: none !important; 	padding: 0 !important; } </style> 	<link rel='stylesheet' id='wp-block-library-css'  href='./css/dist-block-library-style.min.css' media='all' /> <link rel='stylesheet' id='wp_meliora-style-css'  href='./css/wp-meliora-style.css' media='all' /> <link rel='stylesheet' id='dashicons-css'  href='./css/v9l-dashicons.min.css' media='all' /> <link rel='stylesheet' id='enlighterjs-css'  href='./css/enlighter-cache-enlighterjs.min.css' media='all' />         <script>
+            /* <![CDATA[ */
+            var rcewpp = {
+                "ajax_url":"/",
+                "nonce": "34564bfd5b",
+                "home_url": "/",
+                "settings_icon": 'https://0xli.me/wp-content/plugins/export-wp-page-to-static-html/admin/images/settings.png',
+                "settings_hover_icon": 'https://0xli.me/wp-content/plugins/export-wp-page-to-static-html/admin/images/settings_hover.png'
+            };
+            /* ]]\> */
+        </script>         <link rel="https://api.w.org/" href="/" /><link rel="alternate" type="application/json" href="/" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/" /> <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="/" />  <meta name="generator" content="WordPress 5.8.2" /> <link rel="canonical" href="/" /> <link rel='shortlink' href='https://0xli.me/?p=246' /> <link rel="alternate" type="application/json+oembed" href="/" /> <link rel="alternate" type="text/xml+oembed" href="/" />     <style>         :root {	 	            --wp-meliora-primary-color: #FFBA9D; 	            --wp-meliora-base-font-color: #777777; 	            --wp-meliora-heading-color: #474747; 	             	            --wp-meliora-link-normal-color: #000 ; 	            --wp-meliora-link-hover-color: #FFBA9D ; 			}    </style> 	<style>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><link rel="icon" href="./images/limewirelogo-96x96.png" sizes="32x32" /> <link rel="icon" href="./images/limewirelogo-300x300.png" sizes="192x192" /> <link rel="apple-touch-icon" href="images/limewirelogo-300x300.png" /> <meta name="msapplication-TileImage" content="images/limewirelogo-300x300.png" /> 		<style id="wp-custom-css"> 			.wp-block-image img {     max-width: 100%;     margin-left: auto;     margin-right: auto;     display: block; 		margin-bottom 0px; 		 } .wp-block-image figcaption {     margin-top: 0em; } figure figcaption {     text-align: center; 		font-size: 14px; 		font-weight: lighter; 		color: grey; } code, kbd, samp{ 	color: darkgreen; } 		</style> 		<style id="kirki-inline-styles">.h1,h1{font-family:Roboto Mono;font-size:24px;font-weight:300;line-height:1.5;}.h2,h2{font-size:calc(24px - 0.3125rem);font-weight:300;font-family:Roboto Mono;line-height:1.5;}.h3,h3{font-size:calc(24px - 0.38rem);font-weight:300;font-family:Roboto Mono;}.h4,h4{font-size:calc(24px - 0.44rem);font-weight:300;font-family:Roboto Mono;}.h5,h5{font-size:calc(24px - 0.52rem);font-weight:300;font-family:Roboto Mono;}.h6,h6{font-size:calc(24px - 0.6rem);font-weight:300;font-family:Roboto Mono;}body{font-size:16px;line-height:1.5;font-family:Roboto Mono;}.c-post__content__main a{font-family:Roboto Mono;font-size:16px;font-weight:300;line-height:1.5;}/* cyrillic-ext */ @font-face {   font-family: 'Roboto Mono';   font-style: normal;   font-weight: 300;   font-display: swap;   src: url(./fonts/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_gPq_SeW-AJi8SKQuQ4Y.woff) format('woff');   unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; } /* cyrillic */ @font-face {   font-family: 'Roboto Mono';   font-style: normal;   font-weight: 300;   font-display: swap;   src: url(./fonts/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_gPq_QOW-AJi8SKQuQ4Y.woff) format('woff');   unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; } /* greek */ @font-face {   font-family: 'Roboto Mono';   font-style: normal;   font-weight: 300;   font-display: swap;   src: url(./fonts/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_gPq_R-W-AJi8SKQuQ4Y.woff) format('woff');   unicode-range: U+0370-03FF; } /* vietnamese */ @font-face {   font-family: 'Roboto Mono';   font-style: normal;   font-weight: 300;   font-display: swap;   src: url(./fonts/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_gPq_S-W-AJi8SKQuQ4Y.woff) format('woff');   unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB; } /* latin-ext */ @font-face {   font-family: 'Roboto Mono';   font-style: normal;   font-weight: 300;   font-display: swap;   src: url(./fonts/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_gPq_SuW-AJi8SKQuQ4Y.woff) format('woff');   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; } /* latin */ @font-face {   font-family: 'Roboto Mono';   font-style: normal;   font-weight: 300;   font-display: swap;   src: url(./fonts/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_gPq_ROW-AJi8SKQu.woff) format('woff');   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }</style></head>  <body class="page-template-default page page-id-246 no-sidebar"> <div id="page" class="o-page site is-content-sidebar">     <a class="skip-link screen-reader-text" href="#primary">Skip to content</a>     <header id="masthead" class="c-header site-header">         <div class="c-header__main u-default-max-width">             <div class="c-header__branding"> 				            <p class="c-header__branding__title site-title h1">                 <a class="c-header__branding__title__link h1" href="/" rel="home">0xlimE Writeup blog</a>             </p> 		            </div><!-- .site-branding -->              <nav id="site-navigation" class="c-header__navigation main-navigation">                 <button aria-label="Toggle menu" class="c-header__navigation__toggle js-menu-toggle menu-toggle" aria-controls="primary-menu" aria-expanded="false">                     <span class="dashicons dashicons-menu-alt"></span></button> 				<ul id="primary-menu" class="menu js-primary-menu"><li class='menu-item menu-item-type-custom menu-item-object-custom menu-item-home'><a href="/">Home</a></li> <li class='menu-item menu-item-type-post_type menu-item-object-page'><a href="/">Passwords</a></li> <li class='menu-item menu-item-type-taxonomy menu-item-object-category'><a href="/">HTB Machines</a></li> <li class='menu-item menu-item-type-taxonomy menu-item-object-category'><a href="/">HTB Challenges</a></li> <li class='menu-item menu-item-type-taxonomy menu-item-object-category'><a href="/">CTF</a></li> </ul>            </nav><!-- #site-navigation --> 			        </div>     </header><!-- #masthead -->      <main id="primary" class="site-main">         <div class="site-main__container default-max-width">             <div class="site-main__content"> 				 <article id="post-246" class="c-page post-246 page type-page status-publish has-post-thumbnail hentry">      <header class="c-page__header entry-header"> 		<h1 class="c-page__title entry-title">Hackthebox Challenge &#8211; Canvas</h1>    </header><!-- .entry-header -->      <div class="entry-content"> 		 <p>This was a super easy Misc challenge from HTB, if you know what to look for this can be done in a few minutes.</p>    <figure class="wp-block-image size-large"><img loading="lazy" width="1021" height="247" src="./images/Capture.png" alt="" class="wp-image-638"/></figure>    <p>We download the challenge, unzip it and see some .html files and some folders with .js and .css. Lets try and see the webpage.</p>    <figure class="wp-block-image size-large"><img loading="lazy" width="1024" height="548" src="./images/Capture-1-1024x548.png" alt="" class="wp-image-639"/></figure>    <p>Really nothing special, I won&#8217;t even start to try and login, let&#8217;s open the .js</p>    <figure class="wp-block-image size-large"><img loading="lazy" width="629" height="187" src="./images/billede.png" alt="" class="wp-image-640"/></figure>    <p>Its obfucsated javascript, lets use a web based javascript deobfuscater: https://lelinhtinh.github.io/de4js/.<br>After deobfuscating we get the following output:</p>    <pre class="EnlighterJSRAW" data-enlighter-language="js" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">
+var _0x4e0b = [
+'toString',
+'username',
+'console',
+'getElementById',
+'log',
+'bind',
+'disabled',
+'apply',
+'admin',
+'prototype',
+'{}.constructor(\"return this\")( )',
+' attempt;',
+'value',
+'constructor',
+'You have left ',
+'trace',
+'return /\" + this + \"/',
+'table',
+'length',
+'__proto__',
+'error',
+'Login successfully'
+];
+
+(function(_0x173c04, _0x4e0b6e) {
+var _0x20fedb = function(_0x2548ec) {
+        while (--_0x2548ec) {
+            _0x173c04['push'](_0x173c04['shift']());
+        }
+    },
+    _0x544f36 = function() {
+        var _0x4c641a = {
+            'data': {
+                'key': 'cookie',
+                'value': 'timeout'
+            },
+            'setCookie': function(_0x35c856, _0x13e7c5, _0x58186, _0xf5e7a4) {
+                _0xf5e7a4 = _0xf5e7a4 || {};
+                var _0x120843 = _0x13e7c5 + '=' + _0x58186,
+                    _0x3f3096 = 0x0;
+                for (var _0x159a78 = 0x0, _0x1307a5 = _0x35c856['length']; _0x159a78 < _0x1307a5; _0x159a78++) {
+                    var _0x2316f9 = _0x35c856[_0x159a78];
+                    _0x120843 += '; ' + _0x2316f9;
+                    var _0x22cb86 = _0x35c856[_0x2316f9];
+                    _0x35c856['push'](_0x22cb86), _0x1307a5 = _0x35c856['length'], _0x22cb86 !== !![] && (_0x120843 += '=' + _0x22cb86);
+                }
+                _0xf5e7a4['cookie'] = _0x120843;
+            },
+            'removeCookie': function() {
+                return 'dev';
+            },
+            'getCookie': function(_0x589958, _0x2bfede) {
+                _0x589958 = _0x589958 || function(_0x168695) {
+                    return _0x168695;
+                };
+                var _0x4b3aae = _0x589958(new RegExp('(?:^|; )' + _0x2bfede['replace'](/([.$?*|{}()[]\/+^])/g, '$1') + '=([^;]*)'));
+                var _0x43e750 = function(_0x387366, _0x8c72e7) {
+                    _0x387366(++_0x8c72e7);
+                };
+                return _0x43e750(_0x20fedb, _0x4e0b6e), _0x4b3aae ? decodeURIComponent(_0x4b3aae[0x1]) : undefined;
+            }
+        };
+
+        var _0x1d30b3 = function() {
+            var _0x23ed4e = new RegExp('\\w+ *\\(\\) *{\\w+ *[\'|\"].+[\'|\"];? *}');
+            return _0x23ed4e['test'](_0x4c641a['removeCookie']['toString']());
+        };
+
+        _0x4c641a['updateCookie'] = _0x1d30b3;
+        var _0x488f18 = '';
+        var _0x4ac08e = _0x4c641a['updateCookie']();
+
+        if (!_0x4ac08e) {
+            _0x4c641a['setCookie'](['*'], 'counter', 0x1);
+        } else if (_0x4ac08e) {
+            _0x488f18 = _0x4c641a['getCookie'](null, 'counter');
+        } else {
+            _0x4c641a['removeCookie']();
+        }
+    };
+
+_0x544f36();
+}(_0x4e0b, 0x182));
+
+var _0x20fe = function(_0x173c04, _0x4e0b6e) {
+_0x173c04 = _0x173c04 - 0x0;
+var _0x20fedb = _0x4e0b[_0x173c04];
+return _0x20fedb;
+};
+
+var _0x35c856 = function() {
+var _0x58186 = !![];
+return function(_0xf5e7a4, _0x120843) {
+    var _0x3f3096 = _0x58186 ? function() {
+        var _0x228e0e = _0x20fe;
+        if (_0x120843) {
+            var _0x159a78 = _0x120843[_0x228e0e('0x11')](_0xf5e7a4, arguments);
+            return _0x120843 = null, _0x159a78;
+        }
+    } : function() {};
+    return _0x58186 = ![], _0x3f3096;
+};
+}();
+
+var _0x4ac08e = _0x35c856(this, function() {
+var _0x1307a5 = function() {
+    var _0x257462 = _0x20fe,
+        _0x2316f9 = _0x1307a5[_0x257462('0x1')](_0x257462('0x4'))()[_0x257462('0x1')]('^([^ ]+( +[^ ]+)+)+[^ ]}');
+    return !_0x2316f9['test'](_0x4ac08e);
+};
+return _0x1307a5();
+});
+
+_0x4ac08e();
+
+var _0x4c641a = function() {
+var _0x22cb86 = !![];
+return function(_0x589958, _0x2bfede) {
+    var _0x4b3aae = _0x22cb86 ? function() {
+        var _0x13eb7f = _0x20fe;
+        if (_0x2bfede) {
+            var _0x43e750 = _0x2bfede[_0x13eb7f('0x11')](_0x589958, arguments);
+            return _0x2bfede = null, _0x43e750;
+        }
+    } : function() {};
+    return _0x22cb86 = !!, _0x4b3aae;
+};
+}();
+
+var _0x2548ec = _0x4c641a(this, function() {
+var _0x4cb6ce = _0x20fe,
+    _0x168695;
+try {
+    var _0x387366 = Function('return (function() ' + _0x4cb6ce('0x14') + ');');
+    _0x168695 = _0x387366();
+} catch (_0x57823f) {
+    _0x168695 = window;
+}
+
+var _0x8c72e7 = _0x168695[_0x4cb6ce('0xc')] = _0x168695[_0x4cb6ce('0xc')] || {},
+    _0x23ed4e = [_0x4cb6ce('0xe'), 'warn', 'info', _0x4cb6ce('0x8'), 'exception', _0x4cb6ce('0x5'), _0x4cb6ce('0x3')];
+
+for (var _0x3d84c2 = 0x0; _0x3d84c2 < _0x23ed4e[_0x4cb6ce('0x6')]; _0x3d84c2++) {
+    var _0x3aed9e = _0x4c641a[_0x4cb6ce('0x1')][_0x4cb6ce('0x13')]['bind'](_0x4c641a),
+        _0x57c30b = _0x23ed4e[_0x3d84c2],
+        _0x526aea = _0x8c72e7[_0x57c30b] || _0x3aed9e;
+
+    _0x3aed9e[_0x4cb6ce('0x7')] = _0x4c641a[_0x4cb6ce('0xf')](_0x4c641a);
+    _0x3aed9e['toString'] = _0x526aea[_0x4cb6ce('0xa')][_0x4cb6ce('0xf')](_0x526aea);
+    _0x8c72e7[_0x57c30b] = _0x3aed9e;
+}
+});
+
+_0x2548ec();
+
+var attempt = 0x3;
+
+function validate() {
+var _0x4d1a17 = _0x20fe,
+    _0x32b344 = document['getElementById']('username')['value'],
+    _0x5997a2 = document[_0x4d1a17('0xd')]('password')[_0x4d1a17('0x0')];
+
+if (_0x32b344 == _0x4d1a17('0x12') && _0x5997a2 == _0x4d1a17('0x12')) {
+    alert(_0x4d1a17('0x9'));
+    window['location'] = 'dashboard.html';
+    return ![];
+} else {
+    attempt--;
+    alert(_0x4d1a17('0x2') + attempt + _0x4d1a17('0x15'));
+
+    if (attempt == 0x0) {
+        document[_0x4d1a17('0xd')](_0x4d1a17('0xb'))['disabled'] = !![];
+        document[_0x4d1a17('0xd')]('password')[_0x4d1a17('0x10')] = !![];
+        document[_0x4d1a17('0xd')]('submit')[_0x4d1a17('0x10')] = !![];
+        return ![];
+    }
+}
+}
+
+var res = String['fromCharCode'](
+0x48, 0x54, 0x42, 0x7b, 0x57, 0x33, 0x4c, 0x63, 0x30, 0x6d, 0x33, 0x5f, 
+0x37, 0x30, 0x5f, 0x4a, 0x34, 0x56, 0x34, 0x35, 0x43, 0x52, 0x31, 0x70, 
+0x37, 0x5f, 0x64, 0x33, 0x30, 0x62, 0x46, 0x75, 0x35, 0x43, 0x34, 0x37, 
+0x31, 0x30, 0x4e, 0x7d, 0xa
+);
+
+        </pre>    <p>No need to spend much time trying to understand this, my eye instantly finds the var res = <code>String['fromCharCode'](0x48, 0x54...</code> which totally looks like a string as hex. I copy and pop it into cyberchef.</p>    <figure class="wp-block-image size-large"><img loading="lazy" width="1024" height="1024" src="./images/billede-1-1024x1024.png" alt="" class="wp-image-641" srcset="./images/billede-1-1024x1024.png 1024w, ./images/billede-1-300x300.png 300w, ./images/billede-1-150x150.png 150w, ./images/billede-1-768x768.png 768w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>    <p>And we spot the flag. Very straightforward.</p>     </div><!-- .entry-content -->  	</article><!-- #post-246 -->             </div> 	                </div>     </main><!-- #main -->   <footer id="colophon" class="c-footer site-footer">     <div class="c-footer__top">         <div class="c-footer__top__back-to-top">             <a aria-label="Back to Top" class="c-footer__top__back-to-top__link" href="#masthead">                 <span class="dashicons dashicons-arrow-up-alt2"></span>             </a>         </div>     </div>     <div class="c-footer__bottom site-info">         <div class="u-default-max-width">             <div class="c-footer__grid">                 <div class="c-footer__copyright"> 	                                        <div class="c-footer__branding s-footer-branding">                                         <a class="c-footer__branding__title h1" href="/" rel="home">0xlimE Writeup blog</a> 		                        </div> 	                                    <p> 					                    </p>                 </div>                             </div>         </div><!-- .site-info -->     </div> </footer><!-- #colophon -->  </div><!-- #page -->  <script src='./js/wp-meliora-js-navigation.js' id='wp_meliora-navigation-js'></script> <script src='./js/wp-meliora-js-vendor.min.js' id='wp_meliora-carousel-js'></script> <script src='./js/wp-meliora-js-main.js' id='wp_meliora-main-js'></script> <script src='./js/enlighter-cache-enlighterjs.min.js' id='enlighterjs-js'></script> <script id='enlighterjs-js-after'>
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":4,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":false,"textOverflow":"scroll","linenumbers":true,"theme":"enlighter","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script> <script src='./js/pqp-wp-embed.min.js' id='wp-embed-js'></script>  </body> </html>

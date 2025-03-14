@@ -20,7 +20,6 @@ tag = 'tags'
 description = "Security Research and Bug Hunting"
 
 # Appearance settings
-theme = 'auto'
 colorPalette = 'default'
 hideHeader = false
 
@@ -74,12 +73,10 @@ url = "https://r4.dk"
     [markup.goldmark.renderer]
       unsafe = true
   [markup.highlight]
-      # Change this to false to use CSS classes instead of inline styles
-      noClasses = false
-      # Either keep github or choose a theme that works well in both modes
-      style = "monokai" # Alternative: "dracula", "monokai", etc.
-      guessSyntax = true
-      tabWidth = 2
+    style = "dracula"  # Dark background with vibrant colors
+    guessSyntax = true
+    noClasses = true  # Keep true to force the inline styles
+    tabWidth = 2
 
 
 # Giscus comments
