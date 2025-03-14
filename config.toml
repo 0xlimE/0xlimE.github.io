@@ -37,7 +37,7 @@ homeCollection = 'posts'
 
 # Lists parameters
 paginationSize = 100
-listSummaries = true
+listSummaries = false
 listDateFormat = '2 Jan 2006'
 
 # Breadcrumbs
@@ -74,7 +74,7 @@ url = "https://r4.dk"
     [markup.goldmark.renderer]
       unsafe = true
   [markup.highlight]
-    style = 'monokai'
+    style = "github"  # Good for light themes
     guessSyntax = true
     noClasses = true
     tabWidth = 2
