@@ -13,10 +13,6 @@ theme = "yinyang"
     style = "bw"
     tabWidth = 2
 
-[author]
-  name = "0xlime"
-  homepage = "https://blog.r4.dk/"
-
 [languages]
   [languages.en]
     contentDir = "content/en"
@@ -24,9 +20,17 @@ theme = "yinyang"
     weight = 1
 
 [params]
-mainSections = ["posts"]
-headTitle = "0xlime blog posts"
-# extraHead = '<script async src="https://www.googletagmanager.com/gtag/js?id=UA-xxx"></script>'
+  # Moved author information here
+  author = "0xlime"
+  authorHomepage = "https://blog.r4.dk/"
+
+  mainSections = ["posts"]
+  headTitle = "0xlime blog posts"
+  # extraHead = '<script async src="#"></script>'
+  postHeaderContent = ""
+  postFooterContent = "<br/><br/><p>Subscribe to：<a target='_blank' href='#y'>0xlime</a></p>"
+  # extraCSSFiles = ["css/foo.css", "css/bar.css"]
+  extraCSSFiles = []
 
 [[params.socials]]
 name = "About Me"
@@ -35,8 +39,3 @@ link = "https://r4.dk"
 [[params.socials]]
 name = "Github"
 link = "https://github.com/0xlime"
-
-postHeaderContent = ""
-postFooterContent = "<br/><br/><p>Subscribe to：<a target='_blank' href='https://mailchi.mp/a1a0d59e7a19/joway'>Joway's Blog</a></p>"
-# extraCSSFiles = ["css/foo.css", "css/bar.css"]
-extraCSSFiles = []
