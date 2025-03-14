@@ -65,7 +65,7 @@ Ok sick nok, vi kan se at `vsftpd 2.3.4` kører. lad os lige prøve at hurtigt g
 
 
 
-![vsftpd](/assets/vsftpdbackdoor.JPG)
+![vsftpd](vsftpdbackdoor.JPG)
 
 
 ok det virker som om der er en bagdør i den her version, hvis vi læser lidt på nr 2 link, så kan vi se hvad det går ud på. Scriptet fra exploit-db ser således ud.
@@ -115,7 +115,7 @@ Jeg valgte dog bare at gøre det manuelt
 
 sry for at have sagt det her er nemt, det er min fejl :(
 
-![vsftpd](/assets/ftpconnect.jpg)
+![vsftpd](ftpconnect.jpg)
 
 Som du kan se på ovenstående screenshot så forbinder jeg bare med ovenstående info, og så netcatter jeg til port 6200 og har så bruger på maskinen.
 
@@ -140,4 +140,4 @@ og så skrive `/bin/bash -p`
 
 og vi kan finde flaget
 
-![vsftpd](/assets/privesc2.jpg)
+![vsftpd](privesc2.jpg)
