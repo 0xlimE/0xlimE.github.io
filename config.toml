@@ -74,10 +74,13 @@ url = "https://r4.dk"
     [markup.goldmark.renderer]
       unsafe = true
   [markup.highlight]
-    style = "github"  # Good for light themes
-    guessSyntax = true
-    noClasses = true
-    tabWidth = 2
+      # Change this to false to use CSS classes instead of inline styles
+      noClasses = false
+      # Either keep github or choose a theme that works well in both modes
+      style = "monokai" # Alternative: "dracula", "monokai", etc.
+      guessSyntax = true
+      tabWidth = 2
+
 
 # Giscus comments
 [params.giscus]
