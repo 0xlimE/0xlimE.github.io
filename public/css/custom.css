@@ -1,0 +1,50 @@
+/* Wider content width */
+:root {
+    --main-width: 1024px; /* overrides default of 780px */
+}
+
+.container, 
+main, 
+article, 
+.content-container,
+.content,
+.post,
+.page {
+  max-width: 1200px !important; /* Adjust this value as needed */
+  width: 90% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Smaller font size for code blocks */
+pre, 
+pre code,
+.highlight pre,
+.highlight code {
+  font-size: 14px !important; /* Adjust this value as needed */
+  line-height: 1.4 !important;
+}
+
+/* Style for inline code (text in backticks) */
+code:not([class*="language-"]):not(.highlight),
+p code,
+li code,
+td code,
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+  background-color: #f0f0f0 !important; /* Light grey background */
+  color: #e74c3c !important; /* Red text that works with the grey */
+  padding: 2px 5px !important;
+  border-radius: 3px !important;
+  font-family: monospace !important;
+  font-size: 0.9em !important;
+  white-space: nowrap !important;
+}
+
+/* Ensure code blocks maintain their styling */
+pre code {
+  background-color: inherit !important;
+  color: inherit !important;
+  padding: inherit !important;
+  border-radius: inherit !important;
+  white-space: pre !important;
+}

@@ -2,52 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on 0xlime Blog</title>
-    <link>https://example.org/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on 0xlime Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Sat, 07 May 2022 16:17:46 +0200</lastBuildDate>
-    <atom:link href="https://example.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DDC 2022 &#39;Gift&#39; Writeup</title>
-      <link>https://example.org/posts/gift/</link>
+      <link>http://localhost:1313/posts/gift/</link>
       <pubDate>Sat, 07 May 2022 16:17:46 +0200</pubDate>
-      <guid>https://example.org/posts/gift/</guid>
-      <description>&lt;h1 id=&#34;gift&#34;&gt;Gift&lt;/h1&gt;&#xA;&lt;p&gt;Dette er mit writeup for Gift, en challenge som jeg havde til hensigt skulle være nem, men endnu engang i år kom jeg til at fejlvurdere hvad der er &lt;code&gt;nemt&lt;/code&gt; og hver der nok er nærmere &lt;code&gt;medium-svært&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Det er ikke min hensigt at fucke med nogens opfattelse af hvad de kan, sorry for den dårlige sværhedsgrads-labeling :-(&lt;/p&gt;&#xA;&lt;p&gt;(I dette writeup løser jeg opgaven fra en lokalt kørende container, derfor vil du se &lt;code&gt;localhost&lt;/code&gt; i stedet for &lt;code&gt;gift.hkn&lt;/code&gt; på screenshots)&lt;/p&gt;</description>
+      <guid>http://localhost:1313/posts/gift/</guid>
+      <description>&lt;h1 class=&#34;heading&#34; id=&#34;gift&#34;&gt;&#xA;  Gift&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#gift&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;Dette er mit writeup for Gift, en challenge som jeg havde til hensigt skulle være nem, men endnu engang i år kom jeg til at fejlvurdere hvad der er &lt;code&gt;nemt&lt;/code&gt; og hver der nok er nærmere &lt;code&gt;medium-svært&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Det er ikke min hensigt at fucke med nogens opfattelse af hvad de kan, sorry for den dårlige sværhedsgrads-labeling :-(&lt;/p&gt;&#xA;&lt;p&gt;(I dette writeup løser jeg opgaven fra en lokalt kørende container, derfor vil du se &lt;code&gt;localhost&lt;/code&gt; i stedet for &lt;code&gt;gift.hkn&lt;/code&gt; på screenshots)&lt;/p&gt;</description>
     </item>
     <item>
       <title>DDC 2022 &#39;afstiafsted&#39; Writeup</title>
-      <link>https://example.org/posts/afstiafsted/</link>
+      <link>http://localhost:1313/posts/afstiafsted/</link>
       <pubDate>Sat, 07 May 2022 16:17:42 +0200</pubDate>
-      <guid>https://example.org/posts/afstiafsted/</guid>
-      <description>&lt;h1 id=&#34;afsti-afsted&#34;&gt;Afsti afsted&lt;/h1&gt;&#xA;&lt;p&gt;Dette er mit writeup for Afsti afsted, en challenge som jeg havde til hensigt skulle være nem, men endnu engang i år kom jeg til at fejlvurdere hvad der er &lt;code&gt;nemt&lt;/code&gt; og hver der nok er nærmere &lt;code&gt;medium-svært&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Det er ikke min hensigt at fucke med nogens opfattelse af hvad de kan, sorry for den dårlige sværhedsgrads-labeling :-(&lt;/p&gt;&#xA;&lt;p&gt;(I dette writeup løser jeg opgaven fra en lokalt kørende container, derfor vil du se &lt;code&gt;localhost&lt;/code&gt; i stedet for &lt;code&gt;afsti-afsted.hkn&lt;/code&gt; på screenshots)&lt;/p&gt;</description>
+      <guid>http://localhost:1313/posts/afstiafsted/</guid>
+      <description>&lt;h1 class=&#34;heading&#34; id=&#34;afsti-afsted&#34;&gt;&#xA;  Afsti afsted&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#afsti-afsted&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;Dette er mit writeup for Afsti afsted, en challenge som jeg havde til hensigt skulle være nem, men endnu engang i år kom jeg til at fejlvurdere hvad der er &lt;code&gt;nemt&lt;/code&gt; og hver der nok er nærmere &lt;code&gt;medium-svært&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Det er ikke min hensigt at fucke med nogens opfattelse af hvad de kan, sorry for den dårlige sværhedsgrads-labeling :-(&lt;/p&gt;&#xA;&lt;p&gt;(I dette writeup løser jeg opgaven fra en lokalt kørende container, derfor vil du se &lt;code&gt;localhost&lt;/code&gt; i stedet for &lt;code&gt;afsti-afsted.hkn&lt;/code&gt; på screenshots)&lt;/p&gt;</description>
     </item>
     <item>
       <title>Legacy - De Danske Cybermesterskaber 2021 - Nationals - Eth Haiku</title>
-      <link>https://example.org/posts/legacy-eth-haiku/</link>
+      <link>http://localhost:1313/posts/legacy-eth-haiku/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/legacy-eth-haiku/</guid>
+      <guid>http://localhost:1313/posts/legacy-eth-haiku/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Eth Haiku&amp;rdquo; from De Danske Cybermesterskaber Nationals in 2021.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/eth-haiku/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
     <item>
       <title>Legacy - De Danske Cybermesterskaber 2021 - Nationals - Operation Hvid Sandhed</title>
-      <link>https://example.org/posts/legacy-operation-hvid-sandhed/</link>
+      <link>http://localhost:1313/posts/legacy-operation-hvid-sandhed/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/legacy-operation-hvid-sandhed/</guid>
+      <guid>http://localhost:1313/posts/legacy-operation-hvid-sandhed/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Operation Hvid Sandhed&amp;rdquo; from De Danske Cybermesterskaber Nationals in 2021.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/operation-hvid-sandhed/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
     <item>
       <title>Legacy - HTB - Broken Decryptor</title>
-      <link>https://example.org/posts/legacy-broken-decryptor/</link>
+      <link>http://localhost:1313/posts/legacy-broken-decryptor/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/legacy-broken-decryptor/</guid>
+      <guid>http://localhost:1313/posts/legacy-broken-decryptor/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Broken Decryptor&amp;rdquo; from early days hackthebox.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/brokendecryptor/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
     <item>
       <title>Legacy - HTB - Canvas</title>
-      <link>https://example.org/posts/leagcy-canvas/</link>
+      <link>http://localhost:1313/posts/leagcy-canvas/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/leagcy-canvas/</guid>
+      <guid>http://localhost:1313/posts/leagcy-canvas/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Canvas&amp;rdquo; from early days hackthebox.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/canvas/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
   </channel>

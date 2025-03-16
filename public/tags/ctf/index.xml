@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ctf on 0xlime Blog</title>
-    <link>https://example.org/tags/ctf/</link>
+    <link>http://localhost:1313/tags/ctf/</link>
     <description>Recent content in Ctf on 0xlime Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Sat, 15 May 2021 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://example.org/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Legacy - De Danske Cybermesterskaber 2021 - Nationals - Eth Haiku</title>
-      <link>https://example.org/posts/legacy-eth-haiku/</link>
+      <link>http://localhost:1313/posts/legacy-eth-haiku/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/legacy-eth-haiku/</guid>
+      <guid>http://localhost:1313/posts/legacy-eth-haiku/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Eth Haiku&amp;rdquo; from De Danske Cybermesterskaber Nationals in 2021.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/eth-haiku/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
     <item>
       <title>Legacy - De Danske Cybermesterskaber 2021 - Nationals - Operation Hvid Sandhed</title>
-      <link>https://example.org/posts/legacy-operation-hvid-sandhed/</link>
+      <link>http://localhost:1313/posts/legacy-operation-hvid-sandhed/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/legacy-operation-hvid-sandhed/</guid>
+      <guid>http://localhost:1313/posts/legacy-operation-hvid-sandhed/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Operation Hvid Sandhed&amp;rdquo; from De Danske Cybermesterskaber Nationals in 2021.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/operation-hvid-sandhed/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
     <item>
       <title>Legacy - HTB - Broken Decryptor</title>
-      <link>https://example.org/posts/legacy-broken-decryptor/</link>
+      <link>http://localhost:1313/posts/legacy-broken-decryptor/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/legacy-broken-decryptor/</guid>
+      <guid>http://localhost:1313/posts/legacy-broken-decryptor/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Broken Decryptor&amp;rdquo; from early days hackthebox.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/brokendecryptor/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
     <item>
       <title>Legacy - HTB - Canvas</title>
-      <link>https://example.org/posts/leagcy-canvas/</link>
+      <link>http://localhost:1313/posts/leagcy-canvas/</link>
       <pubDate>Sat, 15 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/leagcy-canvas/</guid>
+      <guid>http://localhost:1313/posts/leagcy-canvas/</guid>
       <description>&lt;p&gt;This is a legacy post from my previous blog. It contains the writeup for &amp;ldquo;Canvas&amp;rdquo; from early days hackthebox.&lt;/p&gt;&#xA;&lt;p&gt;&lt;button id=&#34;view-legacy-post&#34; style=&#34;background-color:#007bff;color:white;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;&#34;&gt;View Original Post&lt;/button&gt;&lt;/p&gt;&#xA;&lt;script&gt;&#xA;  document.addEventListener(&#39;DOMContentLoaded&#39;, function() {&#xA;    document.getElementById(&#39;view-legacy-post&#39;).addEventListener(&#39;click&#39;, function() {&#xA;      window.location.href = &#39;/legacy-posts/canvas/index.html&#39;;&#xA;    });&#xA;  });&#xA;&lt;/script&gt;</description>
     </item>
   </channel>

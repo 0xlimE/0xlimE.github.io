@@ -1,0 +1,114 @@
+:root {
+  /* Wider content width */
+  --main-width: 1200px;
+
+  /* Light mode inline code colors */
+  --inline-code-bg: #f3f3f3;
+  --inline-code-color: #e63946;
+  --inline-code-border: #e0e0e0;
+}
+
+/* Make videos conform to content width */
+video {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border-radius: 6px;
+}
+
+/* Style for inline code (text in backticks) - Light mode default */
+p > code,
+li > code,
+td > code,
+h1 > code, h2 > code, h3 > code, h4 > code, h5 > code, h6 > code,
+a > code,
+strong > code,
+em > code {
+  background-color: var(--inline-code-bg) !important;
+  color: var(--inline-code-color) !important;
+  padding: 3px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.9em !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--inline-code-border) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+  margin: 0 2px !important;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+}
+
+/* Smaller font size for code blocks */
+pre, 
+pre code,
+.highlight pre,
+.highlight code {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  border-radius: 6px !important;
+}
+
+/* Ensure code blocks maintain their styling */
+pre code {
+  background-color: inherit !important;
+  color: inherit !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: inherit !important;
+  font-weight: normal !important;
+  margin: 0 !important;
+}
+
+/* Dark mode styles - ONLY for inline code, not code blocks */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --inline-code-bg: #2d333b;
+    --inline-code-color: #ff7b72;
+    --inline-code-border: #444c56;
+  }
+
+  /* Be very specific to avoid affecting code blocks */
+  p > code,
+  li > code,
+  td > code,
+  h1 > code, h2 > code, h3 > code, h4 > code, h5 > code, h6 > code,
+  a > code,
+  strong > code,
+  em > code {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+  }
+
+  /* Explicitly preserve code block styling */
+  pre, pre code, .highlight pre, .highlight code {
+    background-color: inherit !important; /* Let theme handle this */
+    color: inherit !important; /* Let theme handle this */
+  }
+}
+
+/* Video controls styling */
+video::-webkit-media-controls {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0 0 6px 6px;
+}
+
+/* Center videos in content */
+video {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto; /* Changed from 1.5rem 0 to center horizontally */
+  border-radius: 6px;
+  display: block; /* Ensures the video is treated as a block element */
+}
+
+/* Make video container responsive and centered */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: var(--main-width);
+  margin: 1.5rem auto; /* Center the container */
+  text-align: center; /* Center any fallback content */
+}
+
+.video-container video {
+  width: 100%;
+  margin: 0 auto; /* Center the video within the container */
+}
+
