@@ -2,43 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://example.org/</loc>
+    <lastmod>2025-03-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.org/posts/</loc>
+    <lastmod>2025-03-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.org/posts/gift/</loc>
     <lastmod>2022-05-07T16:17:46+02:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/gift/</loc>
-    <lastmod>2022-05-07T16:17:46+02:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2022-05-07T16:17:46+02:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/afstiafsted/</loc>
+    <loc>https://example.org/posts/afstiafsted/</loc>
     <lastmod>2022-05-07T16:17:42+02:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ctf/</loc>
+    <loc>https://example.org/tags/ctf/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ddc/</loc>
+    <loc>https://example.org/tags/ddc/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/htb/</loc>
+    <loc>https://example.org/tags/htb/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/legacy/</loc>
+    <loc>https://example.org/tags/legacy/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/legacy-eth-haiku/</loc>
+    <loc>https://example.org/posts/legacy-eth-haiku/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/legacy-operation-hvid-sandhed/</loc>
+    <loc>https://example.org/posts/legacy-operation-hvid-sandhed/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/legacy-broken-decryptor/</loc>
+    <loc>https://example.org/posts/legacy-broken-decryptor/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/leagcy-canvas/</loc>
+    <loc>https://example.org/posts/leagcy-canvas/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://example.org/tags/</loc>
     <lastmod>2021-05-15T00:00:00+00:00</lastmod>
   </url>
 </urlset>
