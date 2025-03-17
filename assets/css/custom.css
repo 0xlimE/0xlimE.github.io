@@ -36,26 +36,7 @@ em > code {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
 }
 
-/* Smaller font size for code blocks */
-pre, 
-pre code,
-.highlight pre,
-.highlight code {
-  font-size: 14px !important;
-  line-height: 1.4 !important;
-  border-radius: 6px !important;
-}
 
-/* Ensure code blocks maintain their styling */
-pre code {
-  background-color: inherit !important;
-  color: inherit !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: inherit !important;
-  font-weight: normal !important;
-  margin: 0 !important;
-}
 
 /* Dark mode styles - ONLY for inline code, not code blocks */
 @media (prefers-color-scheme: dark) {
