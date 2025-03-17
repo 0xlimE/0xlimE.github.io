@@ -1,7 +1,7 @@
 ---
 title: "Legacy - De Danske Cybermesterskaber 2025 - Qualifiers - Film Til Dig"
 date: 2025-03-14  # Use the original post date
-draft: true
+draft: false
 tags: ["ctf", "ddc"]
 ---
 
