@@ -8,7 +8,7 @@ tags: ["ctf", "ddc"]
 # Film Til Dig
 
 ## Preface
-I was asked to create a `hard` web challenge for this years qualifiers for De Danske Cybermesterskaber, I am every year so excited for this event and to see the young brilliant Danish minds and their hacking capabilities. Since I only do `web` I wanted to get something down that would be a challenge to most, and get at most 10 solves, which seemd to succeeed across categories (*Junior*, *Senior*, *Open*, *Nordics*). So if you are here because you struggled with the challenge, thanks for spending time on it, it is really a cool experience to create something that someone else spends time on.
+I was asked to create a `hard` web challenge for this years qualifiers for De Danske Cybermesterskaber, I am every year so excited for this event and to see the young brilliant Danish minds and their hacking capabilities. Since I only do `web` I wanted to get something down that would be a challenge to most, and get at most 10 solves, which seemed to succeeed across categories (*Junior*, *Senior*, *Open*, *Nordics*). So if you are here because you struggled with the challenge, thanks for spending time on it, it is really a cool experience to create something that someone else spends time on.
 
 ## Solves
 The first person to solve `part 1` and `part 2` of the challenge was no other than `asp`, and when you have to chill and watch a movie, you also need pizza, so I of course sent him a gift card to get a pizza so he could chill out (*spoiler*: he did not chill out). 
@@ -17,6 +17,10 @@ The first person to solve `part 1` and `part 2` of the challenge was no other th
 ![alt text](image-5.png)
 
 The overall solves on the challenge was the following:
+| Challenge        | DK-Junior | DK-Senior | Open | Norway | Finland | Estonia | Total |
+|------------------|-----------|-----------|------|--------|---------|---------|-------|
+| Film for you pt 1 | 2         | 9         | 4    | 5      | 7       | 6       | 33    |
+| Film for you pt 2 | 1         | 5         | 2    | 3      | 5       | 4       | 20    |
 
 
 ## Summary
