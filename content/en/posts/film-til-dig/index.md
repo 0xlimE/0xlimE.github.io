@@ -1,5 +1,5 @@
 ---
-title: "Legacy - De Danske Cybermesterskaber 2025 - Qualifiers - Film Til Dig"
+title: "De Danske Cybermesterskaber 2025 - Qualifiers - Film Til Dig"
 date: 2025-03-14  # Use the original post date
 draft: false
 tags: ["ctf", "ddc"]
