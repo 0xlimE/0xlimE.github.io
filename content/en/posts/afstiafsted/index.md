@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "DDC 2022 'afstiafsted' Writeup"
+title:  "De Danske Cybermesterskaber 2022 - Nationals - afstiafsted"
 date:   2022-05-07 16:17:42 +0200
 categories: writeups
 ---

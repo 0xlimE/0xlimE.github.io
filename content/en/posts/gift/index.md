@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "DDC 2022 'Gift' Writeup"
+title:  "De Danske Cybermesterskaber 2022 - Nationals - Gift"
 date:   2022-05-07 16:17:46 +0200
 categories: writeups
 ---

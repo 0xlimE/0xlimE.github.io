@@ -6,8 +6,15 @@
     <description>Recent content in Ctf on 0xlime Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 15 May 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>De Danske Cybermesterskaber 2025 - Qualifiers - Film Til Dig</title>
+      <link>http://localhost:1313/posts/film-til-dig/</link>
+      <pubDate>Fri, 14 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/film-til-dig/</guid>
+      <description>&lt;h1 class=&#34;heading&#34; id=&#34;film-til-dig&#34;&gt;&#xA;  Film Til Dig&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#film-til-dig&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;preface&#34;&gt;&#xA;  Preface&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#preface&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;I was asked to create a &lt;code&gt;hard&lt;/code&gt; web challenge for this years qualifiers for De Danske Cybermesterskaber, I am every year so excited for this event and to see the young brilliant Danish minds and their hacking capabilities. Since I only do &lt;code&gt;web&lt;/code&gt; I wanted to get something down that would be a challenge to most, and get at most 10 solves, which seemed to succeeed across categories (&lt;em&gt;Junior&lt;/em&gt;, &lt;em&gt;Senior&lt;/em&gt;, &lt;em&gt;Open&lt;/em&gt;, &lt;em&gt;Nordics&lt;/em&gt;). So if you are here because you struggled with the challenge, thanks for spending time on it, it is really a cool experience to create something that someone else spends time on.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Legacy - De Danske Cybermesterskaber 2021 - Nationals - Eth Haiku</title>
       <link>http://localhost:1313/posts/legacy-eth-haiku/</link>
