@@ -68,6 +68,10 @@ name = "posts"
 url = "/posts"
 
 [[params.menu]]
+name = "presentations"
+url = "/presentations"
+
+[[params.menu]]
 name = "about"
 url = "https://r4.dk"
 
