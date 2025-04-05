@@ -1,7 +1,7 @@
 ---
 title: "Security Research - Patch diffing to create a Proof of Concept - Bringing an 'Out of Scope' back 'In Scope' for a bounty!"
 date: 2025-04-04  # Use the original post date
-draft: true
+draft: false
 tags: ["Security research", "Bug Bounty Hunting", "N-Day development"]
 ---
 ## Before reading
