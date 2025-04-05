@@ -4,12 +4,30 @@ date: 2025-04-04  # Use the original post date
 draft: true
 tags: ["Security research", "Bug Bounty Hunting", "N-Day development"]
 ---
+## Before reading
+Do note that I have replaced some details in this blogpost, such as the name of the company, the name of the software, the CVE in question and the discovered vulnerable endpoint. This post is about writing an n-day and not about outing some company or software vendor :-) This means that the enterprise software is not `Enterbuild`, I am not doing bug bounty hunting for `company.com`, and there is no such endpoint as `/operator-hash`, these are all just placeholders so as to not leak information about the targets, just to clarify.
 
-### Before reading
-Do note that I have replaced some details in this blogpost, such as the name of the company, the name of the software, the CVE in question and the discovered vulnerable endpoint. This post is about writing an n-day and not about outing some company or software vendor :-)
 
-### Out of scope -> n day development -> in scope -> Payout
-So this all started when I was doing some bug bounty hunting for a private Intigriti program. I had recently learned a new tactic from Jason Haddix about scanning the Amazon EC2 ranges to look for hosts that are in scope, but won't necessarily show up through certificate transparancy or through other subfinding tools such as `subfinder`. I had been scanning a few million hosts when the following in-scope host popped up.
+## Introduction to N-Day Development
+In the world of vulnerability research, *"N-day"* refers to vulnerabilities that have been patched but where public exploit code doesn't exist. Unlike 0-days (unknown vulnerabilities) or publicly exploitable vulnerabilities, N-days occupy a unique middle ground - they're known to exist but require security researchers to bridge the gap between vulnerability disclosure and working exploit. If you're a pentester, CTF player or bug hunter I am sure you have been searching for `CVE-XXXX-YYYYY POC github` before for a quick win, only to come up empty handed browsing a bunch of different sites rewording each other.
+
+This post documents my journey of taking a vulnerability from "out of scope" to "in scope" in a bug bounty program, by developing an N-day exploit through patch diffing - analyzing the differences between vulnerable and patched versions of software to understand exactly what was fixed and how to exploit it.
+
+## Methodology for N-Day Development
+
+Developing N-day exploits typically follows these steps:
+1. **Identify the vulnerability** - Find references to the CVE
+2. **Acquire software versions** - Obtain both vulnerable and patched versions
+3. **Perform patch diffing** - Compare code to identify what changed
+4. **Understand the vulnerability** - Analyze the code to understand the security issue that was fixed from one version to the other
+5. **Develop a proof of concept** - Use your knowledge to create a working exploit
+6. **Verify and document** - Test against vulnerable systems and document findings
+
+Lets get started!
+
+
+## Submitting an out of scope bug
+So this all started when I was doing some bug bounty hunting for a private Intigriti program. I had recently learned a new tactic from Jason Haddix about scanning the Amazon EC2 ranges to look for hosts that are in scope, but won't necessarily show up through certificate transparency or through other subfinding tools such as `subfinder`. I had been scanning a few million hosts when the following in-scope host popped up.
 
     enterbuild-platform-infra.company.com
 
@@ -21,33 +39,36 @@ But it was interesting navigating to `/robots.txt` and seeing the software leaki
 
 ![alt text](versionnum.png)
 
-Searching the software and the version number revealed that the version of the software vas vulnerable to `CVE-2024-ABCXYZ`
+Searching the software and the version number revealed that the version of the software was vulnerable to `CVE-2024-ABCXYZ`
 
 ![alt text](cvelololol.png)
+Because the deployed version was `3.2.6` and the fix was deployed in `3.2.7` I would assume it was vulnerable to the CVE.
 
 I wanted to exploit it but there was absolutely no information online about a proof of concept, nothing but advisories online rewording the same thing about a password hash leak of the `operator` user. 
 
-At this point I was a bit sleepy and I wanted to just send the submission to Intigriti, it is a pretty large program and I thought *Hey I guess maybe I will just hit a low, guess that is good enough for today*, boy was I wrong. I got the email from Intigriti about a change in the report, always such a rush, so I go to check and its marked `Out of Scope` with this comment from the triager.
+At this point I was a bit sleepy and I wanted to just send the submission to Intigriti, it is a pretty large program and I thought *Hey I guess maybe I will just hit a low, guess that is good enough for today*, boy was I wrong. I got the email from Intigriti about a change in the report, always such a rush, so I go to check and it's marked `Out of Scope` with this comment from the triager.
 
 ![alt text](OOS.png)
 
-God damnit, I should have spent more time looking at the scope rules, but what hurt even more was to see my 100% submission rating now look like this:
+God dammit, I should have spent more time looking at the scope rules, but what hurt even more was to see my 100% submission rating now look like this:
 
 ![alt text](stats.png)
 
-Alright so of course I should have seen this coming, it's not really impactful research in any way to just scan something, spot a vulnerable version and report that it's vulnerable to some CVE to them. However it would be valuable to them if I found out how to actually exploit it and show them that I can do it! 
+## Patch diffing to build an N-day
 
-So what can I do, I looked at the CVE details on the site and saw that the vulnerability was mitigated in `Enterbuild 3.2.7`
+Alright so of course I should have seen this coming, it's not really impactful research in any way to just scan something, spot a vulnerable version and report that it's vulnerable to some CVE to program owners. However it would be valuable to them if I found out how to actually exploit it and show them that I can do it! 
+
+So what can I do? I looked at the CVE details on the site and saw that the vulnerability was mitigated in `Enterbuild 3.2.7`
 It was not some basic configuration issue but rather a bug that was patched. When I went to the Enterbuild website there was no download option, only an option for contacting them for a trial... 
 
 So that is what I did, I filled out the form saying that I was a security researcher interested in getting access to their software to do well.. Security research.
 
 ![alt text](trial2222.png)
 
-So a sales person will reach out to me, guess I gotta wait. Over the next few days I got a response back about how many Developers I was responsible for (1 lol) and got forwarded to a Security person who was curious about my request since they rarely get such requests. I did not mention that I was looking to figure out how to exploit a vulnerability, I just said I was curious to get a trial for security research. This is the correspondance:
+So a sales person will reach out to me, guess I gotta wait. Over the next few days I got a response back about how many Developers I was responsible for (1 lol) and got forwarded to a Security person who was curious about my request since they rarely get such requests. I did not mention that I was looking to figure out how to exploit a vulnerability, I just said I was curious to get a trial for security research. This is the correspondence:
 
 ```text
-Marvin -> Emil
+Simon -> Emil
 
 Hi Emil,
 
@@ -68,27 +89,27 @@ Let me know and I will send over the calendar invite. Looking forward to connect
 
 Cheers,
 
- Marvin
+ Simon
 
 Senior Sales Development Representative
 ```
 
 ```text
-Emil -> Marvin
+Emil -> Simon
 
-Hi Marvin.
+Hi Simon.
 
 I am an independent security contractor who does penetration testing and bug bounty hunting for clients.
 
 https://app.intigriti.com/researcher/profile/0xlime
 
-I am interested in a Enterbuild test license that can allow me to spin up an airgapped version of the software to do security assessment of the software. I am in full compliance with your guidelines at {...} and will naturally confidentially disclose any findings I may have.
+I am interested in a Enterbuild test license that can allow me to spin up an Standaloneped version of the software to do security assessment of the software. I am in full compliance with your guidelines at {...} and will naturally confidentially disclose any findings I may have.
 
 So to answer your questions:
 
     Can you explain your goals or pains you're dealing with that we can address in the trial?
 
-Security research of the Enterbuild platform when self hosted in airgapped systems.
+Security research of the Enterbuild platform when self hosted in Standaloneped systems.
 
     What programming languages/platforms (Java, Kotlin, Android etc.) are you using in your team and across your company and what build tools are you using (Gradle, Maven, Bazel, etc.)?
 
@@ -100,16 +121,16 @@ Just me :-)
 ```
 
 ```text
-Marvin -> Emil
+Simon -> Emil
 Hi Emil,
 
-Thanks again for the insight on what you are looking to accomplish. I have looped in our VP of Information Security - Adam  and he will go ahead and assist you with this process. Looking forward to connecting. Talk soon!
+Thanks again for the insight on what you are looking to accomplish. I have looped in our VP of Information Security - Timothy  and he will go ahead and assist you with this process. Looking forward to connecting. Talk soon!
 
 Cheers,
 ```
 
 ```
-Adam -> Emil
+Timothy -> Emil
 
 Hi Emil
 
@@ -117,34 +138,34 @@ Thanks for getting in touch and finding our Vulnerability Disclosure Policy!
 
 Could you provide any background as to your interest or how you found us? It's rare we get these requests from security researchers outside of the usual missing HTTP headers and DNS problems on our websites we get daily. 
 
-The airgap license will be time limited - how much time would you like? I'd need to check with Sales but i think 2-3 weeks would usually be the most we can do. 
+The Standalone license will be time limited - how much time would you like? I'd need to check with Sales but i think 2-3 weeks would usually be the most we can do. 
 
 We do pen test Enterbuild around 4 times a year but no test can cover everything. 
 
 There may be some interesting information in the Key Features section here; {...}
 
 Thanks,
-Adam
+Timothy
 ```
 
 ```
-Emil -> Adam
+Emil -> Timothy
 
-Hi Adam.
+Hi Timothy.
 
 {..} My interest then came to me again when doing some reconnaissance for a bug bounty program where I found some Enterbuild servers.
 
-I have previously been working on security in DevOps tools, Gitlab mostly but also Jenkins {..}
+I have previously been working on security in DevOps tools, Gitlab mostly but also Jenkins {...}
 
 That is to say, if I find anything again of course I will report it through the responsible disclosure policy.
 
 2-3 weeks is perfect for me I think :-)
 
-Thanks again Adam
+Thanks again Timothy
 ```
 
 ```
-Adam -> Emil
+Timothy -> Emil
 
 Thanks for the explanation! I'll get that license sent over to you
 Feel free to send any questions etc our way. All our documentation is at docs.enterbuild.com
@@ -154,15 +175,13 @@ Alright so if you jumpted to this part, the  correspondance is basically them ch
 
 ![alt text](4gb.png)
 
-So inside these tar archives there were some metadata files
+So inside these two 4gb+ tar archives there were some metadata files
 ![alt text](metadata.png)
 
 And inside the blobs folder, a lot of large blobs of data.
 ![alt text](blobs.png)
 
-These are actually all containers files OCI (Open Container Initiative) format that has been exported to a tarball. I can recover the containers into Docker by running:
-
-So I can load in the docker images using the following command
+These are actually all containers files in OCI (Open Container Initiative) format that has been exported to a tarball. I can export the containers into Docker by running:
 
     docker load < Enterbuild-standalone-3.2.6-images.tar
 
@@ -194,12 +213,13 @@ So this is the resulting containers and their names:
     Loaded image: registry.enterbuild.com/enterbuild/database-upgrade-alpine:3.2.6
     Loaded image: registry.enterbuild.com/enterbuild/enterprise-app:3.2.6
 
-And the most promising of these ones for finding an authentication vulnerability must be these 3:
+There are quite a lot and many of them probably just work as databases, monitoring or have other helpful functions, what I was looking for was something to do with the application. And the most promising of these ones for finding an authentication vulnerability must be these 3:
+
     Loaded image: registry.enterbuild.com/enterbuild/enterprise-app:3.2.6
     Loaded image: registry.enterbuild.com/enterbuild/keycloak:3.2.6
     Loaded image: registry.enterbuild.com/enterbuild/database:3.2.6
 
-But I are going to (and end up being successful with) just picking the `enterprise-app:3.2.6`
+But I am going to (and end up being successful with) just picking the `enterprise-app:3.2.6`
 
 So Claude helps me write a small bash snippet to extract the filesystem for both the vulnerable version (`3.2.6`) of `enterprise-app` and the patched (`3.2.7`).
 
@@ -215,17 +235,18 @@ docker cp vulnerable:/ ./extracted/vulnerable/
 docker cp patched:/ ./extracted/patched/
 ```
 
-Which ended up giving me two filesystems for `enterbuild-enterprise-app` pre and post the patch! The filesystem had a reference to *enterbuild* in the `/opt` directory 
+Which ended up giving me two linux filesystems for `enterbuild-enterprise-app` pre and post the patch! The filesystem had a reference to *enterbuild* in the `/opt` directory 
 
 ![alt text](filessss.png)
 
-So there is a large `enterprise-app-all.jar` that seems to be the entrypoint for this container, inside it there are TONS of files, and I really mean TONS of files, it was such a big file (**300 megabyte .jar**) that 7zip crashed trying to export it. I ended up just saying its not feasible to do and not doing it. So I instead browsed around the 7zip archive only to be even more overwhelmed.
+So there is a large `enterprise-app-all.jar` that seems to be the entrypoint for this container, inside it there are TONS of files, and I really mean TONS of files (`.jar` files are basically zip compressed archives, so you can just open them in 7-zip or whatever), it was such a big file (**300 megabyte .jar**) that 7zip crashed trying to export it. I ended up just saying its not feasible extract and simply not doing it. So I instead browsed around the 7zip archive only to be even more overwhelmed.
 
 ![alt text](enterpriseapp.png)
+This was only about a fourth of what could be seen in the root of the folder, where to even start?
 
-So when doing patch analysis what you want to do is to extract all files pre and post patch and look for changes in files to figure out what happened to patch the vulnerability. 
+So when doing patch analysis what you want to do is to extract all files **pre** and **post** patch and look for changes in files or folders, to figure out what happened in order to patch the vulnerability. 
 
-This is not the easiest approach when you cannot even unzip the large .jar, so what I ended up doing was (with Claude) write a script that will match files to each other inside the jar, check if they have a size difference or if a file only exists in either folder and then extract based on these criteria. This took a bit forth and back but I ended up getting this script to extract files.
+This is not the easiest approach when you cannot even unzip the large `.jar`, so what I ended up doing was (with Claude) write a script that will match files to each other inside the jar, check if they have a size difference or if a file only exists in either folder and then extract based on these criteria. This took a bit forth and back but I ended up getting this script to extract files.
 
 ```python
 #!/usr/bin/env python3
@@ -341,12 +362,13 @@ Running this script gave the following result in `results.txt`
 
 Alright **awesome!!!**  This is realistic that only 435 files were changed out of 138.793 total files. However these were a LOT of `.class` files:
 ![alt text](classfiles_a.png)
+`.class` files are compiled java files which are not inherently easy to read, however they are somewhat easy to decompile back into `.java` files, which can be done with a popular tool named `jadx`: https://github.com/skylot/jadx
 
-So the next step is to use `jadx`, a java decompiler to get the best bet on the decompiled version. I also see a bunch of 1 letter class names like `a.class` which indicates some level of obfuscation.
+So the next step is to use `jadx`, to get the best bet on the decompiled version. I also see a bunch of 1 letter class names like `a.class` which indicates some level of obfuscation.
 
-So Claude writes this script up for me, what it basically does is enumerate through all folders and find `.class` files, take note of the location and run `jadx` on that class file and produce a `.java` file in the corresponding folder structure. 
+So Claude writes this script up for me, what it basically does is enumerate through all the changed files from **pre** and **post** patch and find `.class` files, take note of the location and run `jadx` on that class file and produce a `.java` file in the corresponding folder structure. 
 
-Then the script runs diff on the two of them and generates an overall report that allows me to look at where and what files have changed. AI is amazing at this job.
+Then the script runs diff on the pair of them and generates an overall report that allows me to look at where and what files have changed. AI is amazing at this job.
 
 ```python
 #!/usr/bin/env python3
@@ -530,11 +552,12 @@ with open("decompiled/diff_report.html", "w") as f:
 
 print("An HTML report is available at decompiled/diff_report.html")
 ```
+This script provided an HTML overview of the files with a search ability (lol so insane).
 
 Opening the `diff_report.html` and searching for **admin** (which was just a guess) revealed these files:
 ![alt text](adminsearch.png)
 
-Which lead me to the holy grail and what I was looking for inside a file called `a.java` where I noticed the following line had been changed from `3.2.6` to `3.2.7`
+I had to spend quite some time manually looking around, but eventially I was lead to the holy grail, namely `a.java`  where I noticed the following line had been changed from version `3.2.6` to `3.2.7`
 
 
 ```diff
@@ -543,7 +566,7 @@ Which lead me to the holy grail and what I was looking for inside a file called 
      public void execute(Chain chain) throws Exception {
 -        chain.prefix("operator-hash", chain2 -> {
 -            chain2.post("reset", this::a).path(context -> {
-+        chain.prefix("operator-hash", chain2 -> {
++        chain.prefix("operator-hash-safe", chain2 -> {
 +            chain2.post("reset", ctx -> validateRequest(ctx, this::a)).path(context -> {
                  context.byMethod(byMethodSpec -> {
 -                    byMethodSpec.get(this::b).post(this::c);
@@ -571,8 +594,23 @@ Which lead me to the holy grail and what I was looking for inside a file called 
 +    }
 ```
 
-So this is a routing scheme that specifically gets renamed and patched to require auth. Before the patch there is an issue where you can make a GET or POST request to `/operator-hash` but only the `POST` has the authentication checked So now both have authentication checked. So this means that if we request `/operator-hash` on our target site, we should be able to extract the hash.
-
+So this is a routing scheme that specifically gets renamed and patched to require auth. Before the patch there is an issue where you can make a GET or POST request to `/operator-hash` but only the `POST` has the authentication checked. In the updated version  both have authentication checked. So this means that if I request `/operator-hash` on our target site, I should be able to extract the hash.
 ![alt text](hashessssss.png)
 
-**BINGOOOOO** 
+**BINGOOOOO!!!!** - I have succesfully patch analysised my way to understand how to exploit the CVE.
+
+### Bringing the submission back into scope 
+So this is the hash and salt for the `operator` user, the built in *always-admin* user. Now I tried to crack this password but it came up empty handed, I found out from reading more of the code that it was using `PBKDF2-HMAC-SHA512` with 10k rounds which is notoriously expensive to crack, a few hours on a graphics card came up empty handed, so it was time to just update the Intigriti report with this. Had I found the password it would have been a much more serious issue, but alas, this should be enough to put it back into scope and get my submission rating back to 100%
+
+![alt text](backtotriager.png)
+
+Triage took a bit of time to get back to me, I didn't know you could tag them, but they put it back into scope and shortly after the program manager accepted the issue and awarded me a bounty of 725 $, not bad for a few hours of reversing.
+
+![alt text](bountyxx.png)
+
+### Outro
+So what is the learnings from this? Well first of all read the rules of engagement and scope rules before going at it for a bug bounty program, I thought it was quite embarrasing getting an *out of scope* vulnerability since I really try to preach that this is insanely important to new hunters. 
+
+What you can also learn is that using modern AI tools, N-day development through patch diffing (especially when its Java thats the langauge) is actually somewhat straight forward, Claude helped me write the scripts to pull out the right files, do proper patch diffing and making educated guesses as to where the vulnerable code could be, only based on a vague CVE description. It is important to know which questions to ask and how to ask them, that definitely helped me find the vulnerable part of the code.
+
+I also learned you can now ping members of the report on Intigriti, but maybe that should have been obvious :-) I am now gonna get the payout, pay my taxes and buy a PS5 for my brotherrs birthday. Happy hacking!
