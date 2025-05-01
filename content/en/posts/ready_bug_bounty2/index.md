@@ -1,6 +1,6 @@
 ---
 title: "A fundamental misunderstanding on when you are \"ready\" for bug bounty hunting. Part 2"
-date: 2025-02-02  # Use the original post date
+date: 2025-04-02  # Use the original post date
 draft: false
 tags: ["Bug bounty"]
 ---
