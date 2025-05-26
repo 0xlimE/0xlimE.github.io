@@ -1,6 +1,7 @@
 baseURL = 'https://r4.dk/'
 languageCode = 'en-us'
 title = '0xlime Blog'
+buildDrafts = true
 
 
 [module]
