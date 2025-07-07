@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "File upload vulnerability on info.skat.dk"
+title:  "Path traversal vulnerability on info.skat.dk"
 date:   2025-05-26 16:17:42 +0200
 categories: security-research
 draft: true
