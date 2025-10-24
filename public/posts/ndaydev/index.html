@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Security Research - Patch diffing to create a Proof of Concept - Bringing an &#39;Out of Scope&#39; back &#39;In Scope&#39; for a bounty! | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/ndaydev/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/ndaydev/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="Security Research - Patch diffing to create a Proof of Concept - Bringing an &#39;Out of Scope&#39; back &#39;In Scope&#39; for a bounty!">
+  <meta property="og:description" content="Before reading # Do note that I have replaced some details in this blogpost, such as the name of the company, the name of the software, the CVE in question and the discovered vulnerable endpoint. This post is about writing an n-day and not about outing some company or software vendor :-) This means that the enterprise software is not Enterbuild, I am not doing bug bounty hunting for company.com, and there is no such endpoint as /operator-hash, these are all just placeholders so as to not leak information about the targets, just to clarify.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-04-04T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-04T00:00:00+00:00">
+    <meta property="article:tag" content="Security Research">
+    <meta property="article:tag" content="Bug Bounty Hunting">
+    <meta property="article:tag" content="N-Day Development">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.38f3885a8781b7bd7780021cc7bda42e40b3f6dfa0a57da2bbf7a80f944d1c5e.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/ndaydev/">Security Research - Patch diffing to create a Proof of Concept - Bringing an &#39;Out of Scope&#39; back &#39;In Scope&#39; for a bounty!</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Security Research - Patch diffing to create a Proof of Concept - Bringing an &#39;Out of Scope&#39; back &#39;In Scope&#39; for a bounty!</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2025-04-04T00:00:00&#43;00:00">April 4, 2025</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h2 class="heading" id="before-reading">
+  Before reading
+  <a class="anchor" href="#before-reading">#</a>
+</h2>
+<p>Do note that I have replaced some details in this blogpost, such as the name of the company, the name of the software, the CVE in question and the discovered vulnerable endpoint. This post is about writing an n-day and not about outing some company or software vendor :-) This means that the enterprise software is not <code>Enterbuild</code>, I am not doing bug bounty hunting for <code>company.com</code>, and there is no such endpoint as <code>/operator-hash</code>, these are all just placeholders so as to not leak information about the targets, just to clarify.</p>
+<h2 class="heading" id="introduction-to-n-day-development">
+  Introduction to N-Day Development
+  <a class="anchor" href="#introduction-to-n-day-development">#</a>
+</h2>
+<p>In the world of vulnerability research, <em>&ldquo;N-day&rdquo;</em> refers to vulnerabilities that have been patched but where public exploit code doesn&rsquo;t exist. Unlike 0-days (unknown vulnerabilities) or publicly exploitable vulnerabilities, N-days occupy a unique middle ground - they&rsquo;re known to exist but require security researchers to bridge the gap between vulnerability disclosure and working exploit. If you&rsquo;re a pentester, CTF player or bug hunter I am sure you have been searching for <code>CVE-XXXX-YYYYY POC github</code> before for a quick win, only to come up empty handed browsing a bunch of different sites rewording each other.</p>
+<p>This post documents my journey of taking a vulnerability from &ldquo;out of scope&rdquo; to &ldquo;in scope&rdquo; in a bug bounty program, by developing an N-day exploit through patch diffing - analyzing the differences between vulnerable and patched versions of software to understand exactly what was fixed and how to exploit it.</p>
+<h2 class="heading" id="methodology-for-n-day-development">
+  Methodology for N-Day Development
+  <a class="anchor" href="#methodology-for-n-day-development">#</a>
+</h2>
+<p>Developing N-day exploits typically follows these steps:</p>
+<ol>
+<li><strong>Identify the vulnerability</strong> - Find references to the CVE</li>
+<li><strong>Acquire software versions</strong> - Obtain both vulnerable and patched versions</li>
+<li><strong>Perform patch diffing</strong> - Compare code to identify what changed</li>
+<li><strong>Understand the vulnerability</strong> - Analyze the code to understand the security issue that was fixed from one version to the other</li>
+<li><strong>Develop a proof of concept</strong> - Use your knowledge to create a working exploit</li>
+<li><strong>Verify and document</strong> - Test against vulnerable systems and document findings</li>
+</ol>
+<p>Lets get started!</p>
+<h2 class="heading" id="submitting-an-out-of-scope-bug">
+  Submitting an out of scope bug
+  <a class="anchor" href="#submitting-an-out-of-scope-bug">#</a>
+</h2>
+<p>So this all started when I was doing some bug bounty hunting for a private Intigriti program. I had recently learned a new tactic from Jason Haddix about scanning the Amazon EC2 ranges to look for hosts that are in scope, but won&rsquo;t necessarily show up through certificate transparency or through other subfinding tools such as <code>subfinder</code>. I had been scanning a few million hosts when the following in-scope host popped up.</p>
+<pre><code>enterbuild-platform-infra.company.com
+</code></pre>
+<p>Navigating to the frontpage of this site showed a login page that I did not want to start messing with, it was clear that this was some specific enterprise software and since I am not doing bug bounty for <code>Enterbuild</code> but rather <code>company.com</code>, this is not a place to start poking for vulns.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/landing1111.png" width="1903px" height="845px">
+    </div>
+
+    
+</figure>
+</p>
+<p>But it was interesting navigating to <code>/robots.txt</code> and seeing the software leaking the version number</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/versionnum.png" width="1911px" height="1052px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Searching the software and the version number revealed that the version of the software was vulnerable to <code>CVE-2024-ABCXYZ</code></p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/cvelololol.png" width="1916px" height="451px">
+    </div>
+
+    
+</figure>
+
+Because the deployed version was <code>3.2.6</code> and the fix was deployed in <code>3.2.7</code> I would assume it was vulnerable to the CVE.</p>
+<p>I wanted to exploit it but there was absolutely no information online about a proof of concept, nothing but advisories online rewording the same thing about a password hash leak of the <code>operator</code> user.</p>
+<p>At this point I was a bit sleepy and I wanted to just send the submission to Intigriti, it is a pretty large program and I thought <em>Hey I guess maybe I will just hit a low, guess that is good enough for today</em>, boy was I wrong. I got the email from Intigriti about a change in the report, always such a rush, so I go to check and it&rsquo;s marked <code>Out of Scope</code> with this comment from the triager.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/OOS.png" width="1199px" height="727px">
+    </div>
+
+    
+</figure>
+</p>
+<p>God dammit, I should have spent more time looking at the scope rules, but what hurt even more was to see my 100% submission rating now look like this:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/stats.png" width="303px" height="341px">
+    </div>
+
+    
+</figure>
+</p>
+<h2 class="heading" id="patch-diffing-to-build-an-n-day">
+  Patch diffing to build an N-day
+  <a class="anchor" href="#patch-diffing-to-build-an-n-day">#</a>
+</h2>
+<p>Alright so of course I should have seen this coming, it&rsquo;s not really impactful research in any way to just scan something, spot a vulnerable version and report that it&rsquo;s vulnerable to some CVE to program owners. However it would be valuable to them if I found out how to actually exploit it and show them that I can do it!</p>
+<p>So what can I do? I looked at the CVE details on the site and saw that the vulnerability was mitigated in <code>Enterbuild 3.2.7</code>
+It was not some basic configuration issue but rather a bug that was patched. When I went to the Enterbuild website there was no download option, only an option for contacting them for a trial&hellip;</p>
+<p>So that is what I did, I filled out the form saying that I was a security researcher interested in getting access to their software to do well.. Security research.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/trial2222.png" width="1421px" height="764px">
+    </div>
+
+    
+</figure>
+</p>
+<p>So a sales person will reach out to me, guess I gotta wait. Over the next few days I got a response back about how many Developers I was responsible for (1 lol) and got forwarded to a Security person who was curious about my request since they rarely get such requests. I did not mention that I was looking to figure out how to exploit a vulnerability, I just said I was curious to get a trial for security research. This is the correspondence:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Simon -&gt; Emil
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hi Emil,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Thanks for contacting us, we&#39;d be more than happy to organize a trial.
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>Our goal is to make sure you’ll get the most out of the trial and our engineers will work closely with you to achieve this. To get the right engineer from our side on the call, would you be able to answer the questions below?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Can you explain your goals or pains you&#39;re dealing with that we can address in the trial? 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    What programming languages/platforms (Java, Kotlin, Android etc.) are you using in your team and across your company and what build tools are you using (Gradle, Maven, Bazel, etc.)? 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    How many developers on your team/org contribute to these projects?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>What does your availability look like this week or the following to get things started?
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>Let me know and I will send over the calendar invite. Looking forward to connecting. Talk soon!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Cheers,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Simon
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Senior Sales Development Representative
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Emil -&gt; Simon
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hi Simon.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>I am an independent security contractor who does penetration testing and bug bounty hunting for clients.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>https://app.intigriti.com/researcher/profile/0xlime
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>I am interested in a Enterbuild test license that can allow me to spin up an Standaloneped version of the software to do security assessment of the software. I am in full compliance with your guidelines at {...} and will naturally confidentially disclose any findings I may have.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>So to answer your questions:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Can you explain your goals or pains you&#39;re dealing with that we can address in the trial?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Security research of the Enterbuild platform when self hosted in Standaloneped systems.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    What programming languages/platforms (Java, Kotlin, Android etc.) are you using in your team and across your company and what build tools are you using (Gradle, Maven, Bazel, etc.)?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>I use any programming language needed for my security assessments.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    How many developers on your team/org contribute to these projects?
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Just me :-)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Simon -&gt; Emil
+</span></span><span style="display:flex;"><span>Hi Emil,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Thanks again for the insight on what you are looking to accomplish. I have looped in our VP of Information Security - Timothy  and he will go ahead and assist you with this process. Looking forward to connecting. Talk soon!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Cheers,
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Timothy -&gt; Emil
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hi Emil
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Thanks for getting in touch and finding our Vulnerability Disclosure Policy! 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Could you provide any background as to your interest or how you found us? It&#39;s rare we get these requests from security researchers outside of the usual missing HTTP headers and DNS problems on our websites we get daily. 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The Standalone license will be time limited - how much time would you like? I&#39;d need to check with Sales but i think 2-3 weeks would usually be the most we can do. 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>We do pen test Enterbuild around 4 times a year but no test can cover everything. 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>There may be some interesting information in the Key Features section here; {...}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Thanks,
+</span></span><span style="display:flex;"><span>Timothy
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>Emil <span style="color:#ff79c6">-&gt;</span> Timothy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hi Timothy<span style="color:#ff79c6">.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{<span style="color:#ff79c6">..</span>} My interest then came to me again when doing some reconnaissance <span style="color:#ff79c6">for</span> a bug bounty program where I found some Enterbuild servers<span style="color:#ff79c6">.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>I have previously been working on security <span style="color:#ff79c6">in</span> DevOps tools, Gitlab mostly but also Jenkins {<span style="color:#ff79c6">...</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>That is to say, <span style="color:#ff79c6">if</span> I find anything again of course I will report it through the responsible disclosure policy<span style="color:#ff79c6">.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">-</span><span style="color:#bd93f9">3</span> weeks is perfect <span style="color:#ff79c6">for</span> me I think :<span style="color:#ff79c6">-</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Thanks again Timothy
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Timothy -&gt; Emil
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Thanks for the explanation! I&#39;ll get that license sent over to you
+</span></span><span style="display:flex;"><span>Feel free to send any questions etc our way. All our documentation is at docs.enterbuild.com
+</span></span></code></pre></div><p>Alright so if you jumpted to this part, the  correspondance is basically them checking to make sure that I am not some rogue actor trying to break their system. I end up getting a license sent to me, from here I download version <code>3.2.6</code> and version <code>3.2.7</code> so that I can start diffing!</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/4gb.png" width="833px" height="60px">
+    </div>
+
+    
+</figure>
+</p>
+<p>So inside these two 4gb+ tar archives there were some metadata files
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/metadata.png" width="765px" height="124px">
+    </div>
+
+    
+</figure>
+</p>
+<p>And inside the blobs folder, a lot of large blobs of data.
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/blobs.png" width="1022px" height="171px">
+    </div>
+
+    
+</figure>
+</p>
+<p>These are actually all containers files in OCI (Open Container Initiative) format that has been exported to a tarball. I can export the containers into Docker by running:</p>
+<pre><code>docker load &lt; Enterbuild-standalone-3.2.6-images.tar
+</code></pre>
+<p>So this is the resulting containers and their names:</p>
+<pre><code>Loaded image: registry.enterbuild.com/enterbuild/object-storage-config-initializer:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/database-tasks:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/enterprise-database-migrator:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/metrics-support:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/database-alpine:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/keycloak-config-initializer:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/keycloak-migrator:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/proxy:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/database-setup:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/metrics:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/test-distribution-broker:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/enterprise-operator:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/monitoring-alloy:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/build-cache-node:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/database:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/object-storage:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/monitoring-promtail:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/config-initializer:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/monitoring-loki:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/database-upgrade:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/enterprise-app-background-processor:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/keycloak:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/monitoring-mimir:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/database-upgrade-alpine:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/enterprise-app:3.2.6
+</code></pre>
+<p>There are quite a lot and many of them probably just work as databases, monitoring or have other helpful functions, what I was looking for was something to do with the application. And the most promising of these ones for finding an authentication vulnerability must be these 3:</p>
+<pre><code>Loaded image: registry.enterbuild.com/enterbuild/enterprise-app:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/keycloak:3.2.6
+Loaded image: registry.enterbuild.com/enterbuild/database:3.2.6
+</code></pre>
+<p>But I am going to (and end up being successful with) just picking the <code>enterprise-app:3.2.6</code></p>
+<p>So Claude helps me write a small bash snippet to extract the filesystem for both the vulnerable version (<code>3.2.6</code>) of <code>enterprise-app</code> and the patched (<code>3.2.7</code>).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># Create containers from both versions without running them</span>
+</span></span><span style="display:flex;"><span>docker create --name vulnerable registry.enterbuild.com/enterbuild/enterprise-app:3.2.6
+</span></span><span style="display:flex;"><span>docker create --name patched registry.enterbuild.com/enterbuild/enterprise-app:3.2.7
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Extract the filesystems</span>
+</span></span><span style="display:flex;"><span>mkdir -p extracted/vulnerable
+</span></span><span style="display:flex;"><span>mkdir -p extracted/patched
+</span></span><span style="display:flex;"><span>docker cp vulnerable:/ ./extracted/vulnerable/
+</span></span><span style="display:flex;"><span>docker cp patched:/ ./extracted/patched/
+</span></span></code></pre></div><p>Which ended up giving me two linux filesystems for <code>enterbuild-enterprise-app</code> pre and post the patch! The filesystem had a reference to <em>enterbuild</em> in the <code>/opt</code> directory</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/filessss.png" width="1037px" height="250px">
+    </div>
+
+    
+</figure>
+</p>
+<p>So there is a large <code>enterprise-app-all.jar</code> that seems to be the entrypoint for this container, inside it there are TONS of files, and I really mean TONS of files (<code>.jar</code> files are basically zip compressed archives, so you can just open them in 7-zip or whatever), it was such a big file (<strong>300 megabyte .jar</strong>) that 7zip crashed trying to export it. I ended up just saying its not feasible extract and simply not doing it. So I instead browsed around the 7zip archive only to be even more overwhelmed.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/enterpriseapp.png" width="1167px" height="897px">
+    </div>
+
+    
+</figure>
+
+This was only about a fourth of what could be seen in the root of the folder, where to even start?</p>
+<p>So when doing patch analysis what you want to do is to extract all files <strong>pre</strong> and <strong>post</strong> patch and look for changes in files or folders, to figure out what happened in order to patch the vulnerability.</p>
+<p>This is not the easiest approach when you cannot even unzip the large <code>.jar</code>, so what I ended up doing was (with Claude) write a script that will match files to each other inside the jar, check if they have a size difference or if a file only exists in either folder and then extract based on these criteria. This took a bit forth and back but I ended up getting this script to extract files.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#6272a4">#!/usr/bin/env python3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> subprocess
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> shutil
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> re
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> tempfile
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> hashlib
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Create a temp directory for extraction</span>
+</span></span><span style="display:flex;"><span>temp_dir <span style="color:#ff79c6">=</span> tempfile<span style="color:#ff79c6">.</span>mkdtemp()
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Using temporary directory: </span><span style="color:#f1fa8c">{</span>temp_dir<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Create output directories</span>
+</span></span><span style="display:flex;"><span>os<span style="color:#ff79c6">.</span>makedirs(<span style="color:#f1fa8c">&#34;jar-diff/vulnerable&#34;</span>, exist_ok<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>os<span style="color:#ff79c6">.</span>makedirs(<span style="color:#f1fa8c">&#34;jar-diff/patched&#34;</span>, exist_ok<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Extract both JARs to temporary locations</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Extracting vulnerable JAR...&#34;</span>)
+</span></span><span style="display:flex;"><span>vuln_extract_dir <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(temp_dir, <span style="color:#f1fa8c">&#34;vulnerable&#34;</span>)
+</span></span><span style="display:flex;"><span>os<span style="color:#ff79c6">.</span>makedirs(vuln_extract_dir)
+</span></span><span style="display:flex;"><span>subprocess<span style="color:#ff79c6">.</span>run(
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;unzip -q ./extracted/vulnerable/opt/app/lib/enterprise-app-all.jar -d </span><span style="color:#f1fa8c">{</span>vuln_extract_dir<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>,
+</span></span><span style="display:flex;"><span>    shell<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Extracting patched JAR...&#34;</span>)
+</span></span><span style="display:flex;"><span>patched_extract_dir <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(temp_dir, <span style="color:#f1fa8c">&#34;patched&#34;</span>)
+</span></span><span style="display:flex;"><span>os<span style="color:#ff79c6">.</span>makedirs(patched_extract_dir)
+</span></span><span style="display:flex;"><span>subprocess<span style="color:#ff79c6">.</span>run(
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;unzip -q ./extracted/patched/opt/app/lib/enterprise-app-all.jar -d </span><span style="color:#f1fa8c">{</span>patched_extract_dir<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>,
+</span></span><span style="display:flex;"><span>    shell<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Get file lists with paths preserved</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Generating file lists...&#34;</span>)
+</span></span><span style="display:flex;"><span>vulnerable_files <span style="color:#ff79c6">=</span> {}
+</span></span><span style="display:flex;"><span>patched_files <span style="color:#ff79c6">=</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> root, _, files <span style="color:#ff79c6">in</span> os<span style="color:#ff79c6">.</span>walk(vuln_extract_dir):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> file <span style="color:#ff79c6">in</span> files:
+</span></span><span style="display:flex;"><span>        full_path <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(root, file)
+</span></span><span style="display:flex;"><span>        rel_path <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>relpath(full_path, vuln_extract_dir)
+</span></span><span style="display:flex;"><span>        vulnerable_files[rel_path] <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>getsize(full_path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> root, _, files <span style="color:#ff79c6">in</span> os<span style="color:#ff79c6">.</span>walk(patched_extract_dir):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> file <span style="color:#ff79c6">in</span> files:
+</span></span><span style="display:flex;"><span>        full_path <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(root, file)
+</span></span><span style="display:flex;"><span>        rel_path <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>relpath(full_path, patched_extract_dir)
+</span></span><span style="display:flex;"><span>        patched_files[rel_path] <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>getsize(full_path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Find files with different sizes</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Finding files with different sizes...&#34;</span>)
+</span></span><span style="display:flex;"><span>diff_files <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> filename, vuln_size <span style="color:#ff79c6">in</span> vulnerable_files<span style="color:#ff79c6">.</span>items():
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> filename <span style="color:#ff79c6">in</span> patched_files <span style="color:#ff79c6">and</span> vulnerable_files[filename] <span style="color:#ff79c6">!=</span> patched_files[filename]:
+</span></span><span style="display:flex;"><span>        diff_files<span style="color:#ff79c6">.</span>append((filename, vuln_size, patched_files[filename]))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Sort by size difference (largest first)</span>
+</span></span><span style="display:flex;"><span>diff_files<span style="color:#ff79c6">.</span>sort(key<span style="color:#ff79c6">=</span><span style="color:#ff79c6">lambda</span> x: <span style="color:#8be9fd;font-style:italic">abs</span>(x[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">-</span> x[<span style="color:#bd93f9">2</span>]), reverse<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;diff_sizes.txt&#34;</span>, <span style="color:#f1fa8c">&#34;w&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;Files with different sizes:</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> filename, vuln_size, patch_size <span style="color:#ff79c6">in</span> diff_files:
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">{</span>filename<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> (</span><span style="color:#f1fa8c">{</span>vuln_size<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> → </span><span style="color:#f1fa8c">{</span>patch_size<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">)</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Find files only in patched version</span>
+</span></span><span style="display:flex;"><span>new_files <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> filename <span style="color:#ff79c6">in</span> patched_files:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> filename <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">in</span> vulnerable_files:
+</span></span><span style="display:flex;"><span>        new_files<span style="color:#ff79c6">.</span>append(filename)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;new_files.txt&#34;</span>, <span style="color:#f1fa8c">&#34;w&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">Files only in patched version:</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> filename <span style="color:#ff79c6">in</span> new_files:
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">{</span>filename<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Find files only in vulnerable version</span>
+</span></span><span style="display:flex;"><span>removed_files <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> filename <span style="color:#ff79c6">in</span> vulnerable_files:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> filename <span style="color:#ff79c6">not</span> <span style="color:#ff79c6">in</span> patched_files:
+</span></span><span style="display:flex;"><span>        removed_files<span style="color:#ff79c6">.</span>append(filename)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;removed_files.txt&#34;</span>, <span style="color:#f1fa8c">&#34;w&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">Files only in vulnerable version:</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> filename <span style="color:#ff79c6">in</span> removed_files:
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">{</span>filename<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Create a summary</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;summary.txt&#34;</span>, <span style="color:#f1fa8c">&#34;w&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;=== JAR Comparison Summary ===</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Total files in vulnerable JAR: </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">len</span>(vulnerable_files)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Total files in patched JAR: </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">len</span>(patched_files)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Files with different sizes: </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">len</span>(diff_files)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;New files in patched version: </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">len</span>(new_files)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Removed files in vulnerable version: </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">len</span>(removed_files)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Display the summary</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;summary.txt&#34;</span>, <span style="color:#f1fa8c">&#34;r&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(f<span style="color:#ff79c6">.</span>read())
+</span></span></code></pre></div><p>Running this script gave the following result in <code>results.txt</code></p>
+<pre><code>=== JAR Comparison Summary ===
+Total files in vulnerable JAR: 138793
+Total files in patched JAR: 138828
+Files with different sizes: 435
+New files in patched version: 232
+Removed files in vulnerable version: 197
+</code></pre>
+<p>Alright <strong>awesome!!!</strong>  This is realistic that only 435 files were changed out of 138.793 total files. However these were a LOT of <code>.class</code> files:
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/classfiles_a.png" width="878px" height="461px">
+    </div>
+
+    
+</figure>
+
+<code>.class</code> files are compiled java files which are not inherently easy to read, however they are somewhat easy to decompile back into <code>.java</code> files, which can be done with a popular tool named <code>jadx</code>: <a href="https://github.com/skylot/jadx">https://github.com/skylot/jadx</a></p>
+<p>So the next step is to use <code>jadx</code>, to get the best bet on the decompiled version. I also see a bunch of 1 letter class names like <code>a.class</code> which indicates some level of obfuscation.</p>
+<p>So Claude writes this script up for me, what it basically does is enumerate through all the changed files from <strong>pre</strong> and <strong>post</strong> patch and find <code>.class</code> files, take note of the location and run <code>jadx</code> on that class file and produce a <code>.java</code> file in the corresponding folder structure.</p>
+<p>Then the script runs diff on the pair of them and generates an overall report that allows me to look at where and what files have changed. AI is amazing at this job.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#6272a4">#!/usr/bin/env python3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> subprocess
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> difflib
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> sys
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> concurrent.futures <span style="color:#ff79c6">import</span> ThreadPoolExecutor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Directories containing the class files</span>
+</span></span><span style="display:flex;"><span>vuln_dir <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;jar-diff/vulnerable&#34;</span>
+</span></span><span style="display:flex;"><span>patched_dir <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;jar-diff/patched&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Create directories for decompiled files</span>
+</span></span><span style="display:flex;"><span>decompiled_vuln_dir <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;decompiled/vulnerable&#34;</span>
+</span></span><span style="display:flex;"><span>decompiled_patched_dir <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;decompiled/patched&#34;</span>
+</span></span><span style="display:flex;"><span>diff_dir <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;decompiled/diffs&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>os<span style="color:#ff79c6">.</span>makedirs(decompiled_vuln_dir, exist_ok<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>os<span style="color:#ff79c6">.</span>makedirs(decompiled_patched_dir, exist_ok<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>os<span style="color:#ff79c6">.</span>makedirs(diff_dir, exist_ok<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Get the mapping of safe filenames to original paths</span>
+</span></span><span style="display:flex;"><span>file_mapping <span style="color:#ff79c6">=</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>exists(<span style="color:#f1fa8c">&#34;jar-diff/file_mapping.txt&#34;</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;jar-diff/file_mapping.txt&#34;</span>, <span style="color:#f1fa8c">&#34;r&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">next</span>(f)  <span style="color:#6272a4"># Skip header</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> line <span style="color:#ff79c6">in</span> f:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> <span style="color:#f1fa8c">&#34; -&gt; &#34;</span> <span style="color:#ff79c6">in</span> line:
+</span></span><span style="display:flex;"><span>                safe_name, original_path <span style="color:#ff79c6">=</span> line<span style="color:#ff79c6">.</span>strip()<span style="color:#ff79c6">.</span>split(<span style="color:#f1fa8c">&#34; -&gt; &#34;</span>, <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>                file_mapping[safe_name] <span style="color:#ff79c6">=</span> original_path
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Function to decompile a class file</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">decompile_file</span>(input_file, output_dir):
+</span></span><span style="display:flex;"><span>    base_name <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>basename(input_file)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">not</span> base_name<span style="color:#ff79c6">.</span>endswith(<span style="color:#f1fa8c">&#34;.class&#34;</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    output_file <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(output_dir, base_name<span style="color:#ff79c6">.</span>replace(<span style="color:#f1fa8c">&#34;.class&#34;</span>, <span style="color:#f1fa8c">&#34;.java&#34;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># Use jadx to decompile</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">try</span>:
+</span></span><span style="display:flex;"><span>        subprocess<span style="color:#ff79c6">.</span>run(
+</span></span><span style="display:flex;"><span>            [<span style="color:#f1fa8c">&#34;jadx&#34;</span>, <span style="color:#f1fa8c">&#34;-d&#34;</span>, output_dir, input_file],
+</span></span><span style="display:flex;"><span>            stdout<span style="color:#ff79c6">=</span>subprocess<span style="color:#ff79c6">.</span>PIPE,
+</span></span><span style="display:flex;"><span>            stderr<span style="color:#ff79c6">=</span>subprocess<span style="color:#ff79c6">.</span>PIPE,
+</span></span><span style="display:flex;"><span>            check<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># JADX creates a different output structure, find the decompiled file</span>
+</span></span><span style="display:flex;"><span>        java_name <span style="color:#ff79c6">=</span> base_name<span style="color:#ff79c6">.</span>replace(<span style="color:#f1fa8c">&#34;.class&#34;</span>, <span style="color:#f1fa8c">&#34;.java&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> root, _, files <span style="color:#ff79c6">in</span> os<span style="color:#ff79c6">.</span>walk(output_dir):
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> file <span style="color:#ff79c6">in</span> files:
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> file <span style="color:#ff79c6">==</span> java_name:
+</span></span><span style="display:flex;"><span>                    src_path <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(root, file)
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span> src_path <span style="color:#ff79c6">!=</span> output_file:
+</span></span><span style="display:flex;"><span>                        os<span style="color:#ff79c6">.</span>makedirs(os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>dirname(output_file), exist_ok<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>                        os<span style="color:#ff79c6">.</span>rename(src_path, output_file)
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">return</span> output_file
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># If we couldn&#39;t find the file, try CFR as a fallback</span>
+</span></span><span style="display:flex;"><span>        subprocess<span style="color:#ff79c6">.</span>run(
+</span></span><span style="display:flex;"><span>            [<span style="color:#f1fa8c">&#34;java&#34;</span>, <span style="color:#f1fa8c">&#34;-jar&#34;</span>, <span style="color:#f1fa8c">&#34;cfr.jar&#34;</span>, input_file, <span style="color:#f1fa8c">&#34;--outputdir&#34;</span>, output_dir],
+</span></span><span style="display:flex;"><span>            stdout<span style="color:#ff79c6">=</span>subprocess<span style="color:#ff79c6">.</span>PIPE,
+</span></span><span style="display:flex;"><span>            stderr<span style="color:#ff79c6">=</span>subprocess<span style="color:#ff79c6">.</span>PIPE
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> output_file
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">except</span> Exception <span style="color:#ff79c6">as</span> e:
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Error decompiling </span><span style="color:#f1fa8c">{</span>input_file<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">: </span><span style="color:#f1fa8c">{</span>e<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Decompile all class files in parallel</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Decompiling vulnerable class files...&#34;</span>)
+</span></span><span style="display:flex;"><span>vuln_files <span style="color:#ff79c6">=</span> [os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(vuln_dir, f) <span style="color:#ff79c6">for</span> f <span style="color:#ff79c6">in</span> os<span style="color:#ff79c6">.</span>listdir(vuln_dir) <span style="color:#ff79c6">if</span> f<span style="color:#ff79c6">.</span>endswith(<span style="color:#f1fa8c">&#34;.class&#34;</span>)]
+</span></span><span style="display:flex;"><span>patched_files <span style="color:#ff79c6">=</span> [os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(patched_dir, f) <span style="color:#ff79c6">for</span> f <span style="color:#ff79c6">in</span> os<span style="color:#ff79c6">.</span>listdir(patched_dir) <span style="color:#ff79c6">if</span> f<span style="color:#ff79c6">.</span>endswith(<span style="color:#f1fa8c">&#34;.class&#34;</span>)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> ThreadPoolExecutor(max_workers<span style="color:#ff79c6">=</span>os<span style="color:#ff79c6">.</span>cpu_count()) <span style="color:#ff79c6">as</span> executor:
+</span></span><span style="display:flex;"><span>    vuln_results <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">list</span>(executor<span style="color:#ff79c6">.</span>map(<span style="color:#ff79c6">lambda</span> f: decompile_file(f, decompiled_vuln_dir), vuln_files))
+</span></span><span style="display:flex;"><span>    patched_results <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">list</span>(executor<span style="color:#ff79c6">.</span>map(<span style="color:#ff79c6">lambda</span> f: decompile_file(f, decompiled_patched_dir), patched_files))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Generate diffs for each pair of files</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Generating diffs...&#34;</span>)
+</span></span><span style="display:flex;"><span>all_diffs <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> filename <span style="color:#ff79c6">in</span> os<span style="color:#ff79c6">.</span>listdir(decompiled_vuln_dir):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">not</span> filename<span style="color:#ff79c6">.</span>endswith(<span style="color:#f1fa8c">&#34;.java&#34;</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">continue</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    vuln_file <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(decompiled_vuln_dir, filename)
+</span></span><span style="display:flex;"><span>    patched_file <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(decompiled_patched_dir, filename)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">not</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>exists(patched_file):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">continue</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># Read the files</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(vuln_file, <span style="color:#f1fa8c">&#39;r&#39;</span>, encoding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;utf-8&#39;</span>, errors<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;ignore&#39;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>        vuln_content <span style="color:#ff79c6">=</span> f<span style="color:#ff79c6">.</span>readlines()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(patched_file, <span style="color:#f1fa8c">&#39;r&#39;</span>, encoding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;utf-8&#39;</span>, errors<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;ignore&#39;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>        patched_content <span style="color:#ff79c6">=</span> f<span style="color:#ff79c6">.</span>readlines()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># Generate diff</span>
+</span></span><span style="display:flex;"><span>    diff <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">list</span>(difflib<span style="color:#ff79c6">.</span>unified_diff(
+</span></span><span style="display:flex;"><span>        vuln_content, patched_content,
+</span></span><span style="display:flex;"><span>        fromfile<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;vulnerable/</span><span style="color:#f1fa8c">{</span>filename<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>,
+</span></span><span style="display:flex;"><span>        tofile<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;patched/</span><span style="color:#f1fa8c">{</span>filename<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>,
+</span></span><span style="display:flex;"><span>        n<span style="color:#ff79c6">=</span><span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span>    ))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> diff:
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># Write diff to file</span>
+</span></span><span style="display:flex;"><span>        diff_file <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(diff_dir, filename<span style="color:#ff79c6">.</span>replace(<span style="color:#f1fa8c">&#34;.java&#34;</span>, <span style="color:#f1fa8c">&#34;.diff&#34;</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(diff_file, <span style="color:#f1fa8c">&#39;w&#39;</span>, encoding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;utf-8&#39;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>            f<span style="color:#ff79c6">.</span>writelines(diff)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># Calculate diff size (number of changed lines)</span>
+</span></span><span style="display:flex;"><span>        diff_size <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">sum</span>(<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">for</span> line <span style="color:#ff79c6">in</span> diff <span style="color:#ff79c6">if</span> line<span style="color:#ff79c6">.</span>startswith(<span style="color:#f1fa8c">&#39;+&#39;</span>) <span style="color:#ff79c6">or</span> line<span style="color:#ff79c6">.</span>startswith(<span style="color:#f1fa8c">&#39;-&#39;</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># Get original path if available</span>
+</span></span><span style="display:flex;"><span>        original_path <span style="color:#ff79c6">=</span> file_mapping<span style="color:#ff79c6">.</span>get(filename<span style="color:#ff79c6">.</span>replace(<span style="color:#f1fa8c">&#34;.java&#34;</span>, <span style="color:#f1fa8c">&#34;.class&#34;</span>), <span style="color:#f1fa8c">&#34;Unknown&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        all_diffs<span style="color:#ff79c6">.</span>append((diff_file, diff_size, original_path))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Sort diffs by size (largest changes first)</span>
+</span></span><span style="display:flex;"><span>all_diffs<span style="color:#ff79c6">.</span>sort(key<span style="color:#ff79c6">=</span><span style="color:#ff79c6">lambda</span> x: x[<span style="color:#bd93f9">1</span>], reverse<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Write summary of all diffs</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;decompiled/diff_summary.txt&#34;</span>, <span style="color:#f1fa8c">&#34;w&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;=== All Diffs (Sorted by Size) ===</span><span style="color:#f1fa8c">\n\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> diff_file, diff_size, original_path <span style="color:#ff79c6">in</span> all_diffs:
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;File: </span><span style="color:#f1fa8c">{</span>diff_file<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Original path: </span><span style="color:#f1fa8c">{</span>original_path<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;Changed lines: </span><span style="color:#f1fa8c">{</span>diff_size<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">Decompilation and diff generation complete. Generated </span><span style="color:#f1fa8c">{</span><span style="color:#8be9fd;font-style:italic">len</span>(all_diffs)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> diffs.&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Check decompiled/diff_summary.txt for a summary of all changes, sorted by size.&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;All diffs are available in the decompiled/diffs directory.&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># Create a simple HTML report for easier browsing</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">with</span> <span style="color:#8be9fd;font-style:italic">open</span>(<span style="color:#f1fa8c">&#34;decompiled/diff_report.html&#34;</span>, <span style="color:#f1fa8c">&#34;w&#34;</span>) <span style="color:#ff79c6">as</span> f:
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;&#34;&#34;&lt;!DOCTYPE html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&lt;html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&lt;head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &lt;title&gt;Class File Diff Report&lt;/title&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &lt;style&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        body { font-family: Arial, sans-serif; margin: 20px; }
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        table { border-collapse: collapse; width: 100%; }
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        th { background-color: #f2f2f2; }
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        tr:nth-child(even) { background-color: #f9f9f9; }
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        tr:hover { background-color: #f2f2f2; }
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &lt;/style&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&lt;/head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&lt;body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &lt;h1&gt;Class File Diff Report&lt;/h1&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &lt;table&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        &lt;tr&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            &lt;th&gt;Diff File&lt;/th&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            &lt;th&gt;Original Path&lt;/th&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            &lt;th&gt;Changed Lines&lt;/th&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        &lt;/tr&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> diff_file, diff_size, original_path <span style="color:#ff79c6">in</span> all_diffs:
+</span></span><span style="display:flex;"><span>        rel_path <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>relpath(diff_file, <span style="color:#f1fa8c">&#34;decompiled&#34;</span>)
+</span></span><span style="display:flex;"><span>        f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        &lt;tr&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            &lt;td&gt;&lt;a href=&#34;</span><span style="color:#f1fa8c">{</span>rel_path<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;&gt;</span><span style="color:#f1fa8c">{</span>os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>basename(diff_file)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&lt;/a&gt;&lt;/td&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            &lt;td&gt;</span><span style="color:#f1fa8c">{</span>original_path<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&lt;/td&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">            &lt;td&gt;</span><span style="color:#f1fa8c">{</span>diff_size<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&lt;/td&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        &lt;/tr&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    f<span style="color:#ff79c6">.</span>write(<span style="color:#f1fa8c">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &lt;/table&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&lt;/body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&lt;/html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;An HTML report is available at decompiled/diff_report.html&#34;</span>)
+</span></span></code></pre></div><p>This script provided an HTML overview of the files with a search ability (lol so insane).</p>
+<p>Opening the <code>diff_report.html</code> and searching for <strong>admin</strong> (which was just a guess) revealed these files:
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/adminsearch.png" width="1916px" height="594px">
+    </div>
+
+    
+</figure>
+</p>
+<p>I had to spend quite some time manually looking around, but eventially I was lead to the holy grail, namely <code>a.java</code>  where I noticed the following line had been changed from version <code>3.2.6</code> to <code>3.2.7</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="font-weight:bold">@@ -22,10 +22,11 @@
+</span></span></span><span style="display:flex;"><span><span style="font-weight:bold"></span>     /* renamed from: a, reason: merged with bridge method [inline-methods] */
+</span></span><span style="display:flex;"><span>     public void execute(Chain chain) throws Exception {
+</span></span><span style="display:flex;"><span><span style="color:#f55">-        chain.prefix(&#34;operator-hash&#34;, chain2 -&gt; {
+</span></span></span><span style="display:flex;"><span><span style="color:#f55">-            chain2.post(&#34;reset&#34;, this::a).path(context -&gt; {
+</span></span></span><span style="display:flex;"><span><span style="color:#f55"></span><span style="color:#50fa7b;font-weight:bold">+        chain.prefix(&#34;operator-hash-safe&#34;, chain2 -&gt; {
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+            chain2.post(&#34;reset&#34;, ctx -&gt; validateRequest(ctx, this::a)).path(context -&gt; {
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold"></span>                 context.byMethod(byMethodSpec -&gt; {
+</span></span><span style="display:flex;"><span><span style="color:#f55">-                    byMethodSpec.get(this::b).post(this::c);
+</span></span></span><span style="display:flex;"><span><span style="color:#f55"></span><span style="color:#50fa7b;font-weight:bold">+                    byMethodSpec.get(ctx -&gt; validateRequest(ctx, this::b))
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+                               .post(ctx -&gt; validateRequest(ctx, this::c));
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold"></span>                 });
+</span></span><span style="display:flex;"><span>             });
+</span></span><span style="display:flex;"><span>         });
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">@@ -43,6 +44,19 @@
+</span></span></span><span style="display:flex;"><span><span style="font-weight:bold"></span>         }
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+    private void validateRequest(Context ctx, Handler handler) {
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+        if (!isAuthorizedRequest(ctx)) {
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+            ctx.getResponse().status(HttpResponseStatus.UNAUTHORIZED.code()).send();
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+            return;
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+        }
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+        handler.handle(ctx);
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+    }
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+    
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+    private boolean isAuthorizedRequest(Context ctx) {
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+        // Check for valid authentication token
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+        return ctx.getRequest().getHeaders().contains(&#34;Authorization&#34;) &amp;&amp; 
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+               verifyToken(ctx.getRequest().getHeaders().get(&#34;Authorization&#34;));
+</span></span></span><span style="display:flex;"><span><span style="color:#50fa7b;font-weight:bold">+    }
+</span></span></span></code></pre></div><p>So this is a routing scheme that specifically gets renamed and patched to require auth. Before the patch there is an issue where you can make a GET or POST request to <code>/operator-hash</code> but only the <code>POST</code> has the authentication checked. In the updated version  both have authentication checked. So this means that if I request <code>/operator-hash</code> on our target site, I should be able to extract the hash.
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/hashessssss.png" width="1056px" height="171px">
+    </div>
+
+    
+</figure>
+</p>
+<p><strong>BINGOOOOO!!!!</strong> - I have succesfully patch analysised my way to understand how to exploit the CVE.</p>
+<h3 class="heading" id="bringing-the-submission-back-into-scope">
+  Bringing the submission back into scope
+  <a class="anchor" href="#bringing-the-submission-back-into-scope">#</a>
+</h3>
+<p>So this is the hash and salt for the <code>operator</code> user, the built in <em>always-admin</em> user. Now I tried to crack this password but it came up empty handed, I found out from reading more of the code that it was using <code>PBKDF2-HMAC-SHA512</code> with 10k rounds which is notoriously expensive to crack, a few hours on a graphics card came up empty handed, so it was time to just update the Intigriti report with this. Had I found the password it would have been a much more serious issue, but alas, this should be enough to put it back into scope and get my submission rating back to 100%</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/backtotriager.png" width="1408px" height="1233px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Triage took a bit of time to get back to me, I didn&rsquo;t know you could tag them, but they put it back into scope and shortly after the program manager accepted the issue and awarded me a bounty of 725 $, not bad for a few hours of reversing.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/ndaydev/bountyxx.png" width="1167px" height="394px">
+    </div>
+
+    
+</figure>
+</p>
+<h3 class="heading" id="outro">
+  Outro
+  <a class="anchor" href="#outro">#</a>
+</h3>
+<p>So what is the learnings from this? Well first of all read the rules of engagement and scope rules before going at it for a bug bounty program, I thought it was quite embarrasing getting an <em>out of scope</em> vulnerability since I really try to preach that this is insanely important to new hunters.</p>
+<p>What you can also learn is that using modern AI tools, N-day development through patch diffing (especially when its Java thats the langauge) is actually somewhat straight forward, Claude helped me write the scripts to pull out the right files, do proper patch diffing and making educated guesses as to where the vulnerable code could be, only based on a vague CVE description. It is important to know which questions to ask and how to ask them, that definitely helped me find the vulnerable part of the code.</p>
+<p>I also learned you can now ping members of the report on Intigriti, but maybe that should have been obvious :-) I am now gonna get the payout, pay my taxes and buy a PS5 for my brotherrs birthday. Happy hacking!</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

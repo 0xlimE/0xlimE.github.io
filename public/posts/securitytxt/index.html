@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Analysis of security.txt Adoption Across .dk Domains | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/securitytxt/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/securitytxt/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="Analysis of security.txt Adoption Across .dk Domains">
+  <meta property="og:description" content="“When security risks in web services are discovered by independent security researchers who understand the severity of the risk, they often lack the channels to disclose them properly. As a result, security issues may be left unreported. security.txt defines a standard to help organizations define the process for security researchers to disclose security vulnerabilities securely.”
+– securitytxt.org
+I have recently been curious about how mature Danish companies are in regards to their vulnerability disclosure process. security.txt files provide a standardized way for organizations to communicate this process to security researchers. As defined in RFC 9116, these files should be accessible at either /security.txt or /.well-known/security.txt.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-24T11:17:42+02:00">
+    <meta property="article:modified_time" content="2025-06-24T11:17:42+02:00">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.38f3885a8781b7bd7780021cc7bda42e40b3f6dfa0a57da2bbf7a80f944d1c5e.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/securitytxt/">Analysis of security.txt Adoption Across .dk Domains</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Analysis of security.txt Adoption Across .dk Domains</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2025-06-24T11:17:42&#43;02:00">June 24, 2025</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <blockquote>
+<p>“When security risks in web services are discovered by independent security researchers who understand the severity of the risk, they often lack the channels to disclose them properly. As a result, security issues may be left unreported. security.txt defines a standard to help organizations define the process for security researchers to disclose security vulnerabilities securely.”</p>
+<p>– <a href="https://securitytxt.org/">securitytxt.org</a></p></blockquote>
+<p>I have recently been curious about how mature Danish companies are in regards to their vulnerability disclosure process. <code>security.txt</code> files provide a standardized way for organizations to communicate this process to security researchers. As defined in <a href="https://www.rfc-editor.org/rfc/rfc9116.html">RFC 9116</a>, these files should be accessible at either <code>/security.txt</code> or <code>/.well-known/security.txt</code>.</p>
+<p>To assess the adoption of <code>security.txt</code> among Danish organizations, I scanned the unofficial list of 1,212,913 <code>.dk</code> domains from <a href="https://wallnot.dk/dotdk/">wallnot.dk</a> using <code>httpx</code>, checking both standard locations for the file.</p>
+<p>Initially, the scan found 1,413 domains returning a <code>200 OK</code> response. However, after making another sweep with extra checks for implementations not strictly following RFC 9116, the number of domains with a <code>security.txt</code> file increased significantly.</p>
+<p>The final result? <strong>2,746</strong> out of 1,212,913 domains (a whopping <strong>0.22%</strong>) expose a <code>security.txt</code> file.</p>
+<p>It&rsquo;s important to note that not all <code>200 OK</code> responses contained valid <code>security.txt</code> files; some servers returned HTML pages or other content. To filter for valid files, I processed each response to verify it began with either the <code>Contact</code> or <code>Expires</code> fields as required by the specification. This validation was necessary to distinguish actual <code>security.txt</code> files from other content like Apache default pages or &ldquo;domain parked&rdquo; responses.</p>
+<p>The analysis also revealed that many domains share identical <code>security.txt</code> content, typically because they use the same hosting provider or are managed by the same organization. To present this data more clearly, I grouped domains by their <code>security.txt</code> content (excluding the <code>Expires</code> directive) to identify patterns in how Danish organizations implement their disclosure processes.</p>
+<p>Now, this does not say that much in itself, because not all these domains are active, not all of them are associated with a company, and not all of them even expose a web server on port 443. Additionally, the domain list is not exhaustive, so it&rsquo;s not all <code>.dk</code> domains.</p>
+<p>Still, I thought it was interesting to go through this data. When we are talking about an increased focus on Cybersecurity in Denmark, I think these are metrics that make sense to track.</p>
+<p>The full results, with domains grouped by their shared <code>security.txt</code> content, are available on <a href="https://github.com/0xlimE/dk_security.txt">my GitHub</a></p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

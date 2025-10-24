@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 1 | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/ready_bug_bounty1/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/ready_bug_bounty1/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 1">
+  <meta property="og:description" content="This post was originally made for the bugbounty subreddit that I lurk extensively, see it here: https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/
+This question comes up so often on this subreddit:
+“When am I ready for BBH?” “Okay, after finishing CBBH, am I then ready for bug bounty hunting?” “I’ve studied intricate dynamic analysis of JavaScript in my PhD at MIT, am I ready for bug bounty hunting?” These questions all have the same answer: You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-02-02T00:00:00+00:00">
+    <meta property="article:tag" content="Bug Bounty">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.38f3885a8781b7bd7780021cc7bda42e40b3f6dfa0a57da2bbf7a80f944d1c5e.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/ready_bug_bounty1/">A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 1</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 1</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2025-02-02T00:00:00&#43;00:00">February 2, 2025</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p><em><strong>This post was originally made for the bugbounty subreddit that I lurk extensively, see it here</strong></em>: <a href="https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/">https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/</a></p>
+<hr>
+<p>This question comes up so often on this subreddit:</p>
+<ul>
+<li>&ldquo;When am I ready for BBH?&rdquo;</li>
+<li>&ldquo;Okay, after finishing CBBH, am I then ready for bug bounty hunting?&rdquo;</li>
+<li>&ldquo;I&rsquo;ve studied intricate dynamic analysis of JavaScript in my PhD at MIT, am I ready for bug bounty hunting?&rdquo;</li>
+</ul>
+<p>These questions all have the same answer: <strong>You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.</strong></p>
+<p>It doesn&rsquo;t take any more than that to <em>get started</em> in bug bounty hunting. You can sign up for free on YWH, H1, or Intigriti and just start hacking on a program you think sounds nice, has the right payout table, or whatever.</p>
+<p>What these questions are actually asking is, &ldquo;Am I good enough to earn money? I would like someone to answer me before I dedicate my time to find out,&rdquo; which is just lazy and a completely wrong mentality when it comes to hunting vulnerabilities. It seems that a lot of people are willing to grind endless hours on training content that they paid for but are not willing to just set aside a few hours in a week to figure out if they can be successful in hunting actual bugs.</p>
+<p>And I don&rsquo;t blame people—it&rsquo;s the fear of failing that keeps people in the books/courses for long. There, they are guaranteed success if they try hard enough; at some point, they will answer correctly in the module or pass the exam. There is assurance of a win. This assurance of a win does not exist in actual bug bounty hunting. No program is out there planting &rsquo;easy&rsquo; bugs for beginners to find. It&rsquo;s a cold, hard world where you are fighting with your peers on being first, and you are NOT guaranteed anything after several hours of hunting.</p>
+<p>To explain my own situation: before I started bug bounty hunting around a year ago, I had already worked as a pentester for 3 years. I had finished OSCE3 and grinded more than 100 boxes on HTB. I did this because it was fun, and it mapped well to my pentest work. When I first sat down and tried finding bugs on public programs on Intigriti, it took me more than 50 hours of work to find my first open redirect and a 2-click ATO. After that, it started getting easier with private programs and a better workflow, and I managed to land more and more valid findings. The point here is, I was as ready as you could be, but it still took me several hours to find a valid bug and get into hunting. If you cannot handle sitting 10 hours with nothing to show for it, then bug bounty hunting—or even maybe hacking in general—may just not be for you.</p>
+<p>It&rsquo;s crucial to understand that the success stories you see on Twitter or LinkedIn, with hackers posting massive 10k+ bounties, represent a tiny fraction of the bug bounty community. For most hunters, the success or income if you will, can be sporadic and unpredictable, thats how it is for myself. While there&rsquo;s nothing wrong with aspiring to find critical vulnerabilities, entering the field expecting to quickly discover $10,000 bugs is setting yourself up for disappointment. Success in bug bounty hunting often starts with celebrating your first valid finding, regardless of severity or bounty amount. Many skilled hunters go months between valid findings, and that&rsquo;s perfectly normal. The path to significant earnings requires not just technical skills, but also persistence, effective time management, and the ability to handle long periods without results. You do not get to this point from courses alone, but from actively trying.</p>
+<p><em>TL;DR</em>: Bug hunting requires such a different mentality than finishing a course or playing HTB/THM. If you have the basics down, you are probably &ldquo;ready&rdquo; but most likely far from being successful.</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

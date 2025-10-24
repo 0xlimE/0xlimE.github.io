@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Path traversal vulnerability on info.skat.dk | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/skat-upload/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/skat-upload/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="Path traversal vulnerability on info.skat.dk">
+  <meta property="og:description" content="Preface # I do not endorse performing unsolicited or unauthorized security testing of websites or systems. This article describes a situation where a friend shared an error message they encountered while legitimately using a service, which contained indicators suggesting a potential security vulnerability. Looking closer, this proved to be the case.
+I want to emphasize that I do not actively seek vulnerabilities in systems where I lack explicit permission to test. However, when obvious security flaws are discovered through normal use or observation, I believe there is an ethical responsibility to report them responsibly to help improve overall security.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-26T16:17:42+02:00">
+    <meta property="article:modified_time" content="2025-05-26T16:17:42+02:00">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.38f3885a8781b7bd7780021cc7bda42e40b3f6dfa0a57da2bbf7a80f944d1c5e.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/skat-upload/">Path traversal vulnerability on info.skat.dk</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Path traversal vulnerability on info.skat.dk</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2025-05-26T16:17:42&#43;02:00">May 26, 2025</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <h3 class="heading" id="preface">
+  Preface
+  <a class="anchor" href="#preface">#</a>
+</h3>
+<p>I do not endorse performing unsolicited or unauthorized security testing of websites or systems. This article describes a situation where a friend shared an error message they encountered while legitimately using a service, which contained indicators suggesting a potential security vulnerability. Looking closer, this proved to be the case.</p>
+<p>I want to emphasize that I do not actively seek vulnerabilities in systems where I lack explicit permission to test. However, when obvious security flaws are discovered through normal use or observation, I believe there is an ethical responsibility to report them responsibly to help improve overall security.</p>
+<p>All findings discussed in this post were reported to SKAT through responsible disclosure channels prior to publication.</p>
+<h3 class="heading" id="initial-discovery">
+  Initial Discovery
+  <a class="anchor" href="#initial-discovery">#</a>
+</h3>
+<p>Some time ago, my friend Jan reached out to me on LinkedIn. Presumably, he wrote to me because he saw my posts about security (yay) and thought that I would be interested in an error he got when he had to upload some files to info.skat.dk.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/herankgjealjnfleajnf.png" width="547px" height="520px">
+    </div>
+
+    
+</figure>
+</p>
+<p>The error looked like this:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/hgeiarlgnealingiaelu.png" width="1210px" height="390px">
+    </div>
+
+    
+</figure>
+</p>
+<p>As Jan pointed out, it&rsquo;s not good practice to leak the full path of the file that you just uploaded. It&rsquo;s unnecessary information for the user at best, and at worst, it leaks information to malicious actors.</p>
+<p>I asked Jan what the raw request had looked like, and he sent me this response:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/attahcahjas.png" width="1006px" height="574px">
+    </div>
+
+    
+</figure>
+</p>
+<p>What this shows is a POST request to <a href="https://info.skat.dk/fileupl.ashx">https://info.skat.dk/fileupl.ashx</a>, with query parameters <code>guid</code>, <code>f</code>, <code>disc</code>, <code>reread</code>, <code>uploadDB</code>, <code>clang</code>, and <code>delete</code>, with a file in a multipart form field (the filename is assumed from the multipart request).</p>
+<p>Jan showed me the message he got on a successful upload:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/geageafdeafeafeaefaf.png" width="1490px" height="629px">
+    </div>
+
+    
+</figure>
+</p>
+<p>What was interesting here is that the <code>guid</code> parameter was part of the path where the file was stored in the response message, with <code>@</code> signs prepended to both the filename and the GUID.</p>
+<h3 class="heading" id="investigating-to-see-if-there-is-a-vulnerability">
+  Investigating to see if there is a vulnerability
+  <a class="anchor" href="#investigating-to-see-if-there-is-a-vulnerability">#</a>
+</h3>
+<p>I figured I would look at this more, since I thought it was just about time before someone else would stumble upon this. I didn&rsquo;t know which part of SKAT this was from—I had never myself had to upload anything—but I figured I would just try to send off an unauthenticated forged request. This allowed me to upload some random GIF file like the one Jan did.</p>
+<p>However, I wondered if the GUID was actually validated to be a proper GUID, or if I could put whatever into the filename part. Could I choose any extension?</p>
+<p>The obvious thing to try was to use path traversal to walk out of the directory and up into the webroot, looking at the path given back:</p>
+<pre><code>E:\\inetpub\\wwwroot\\info.skat.dk\\FileUpload\\@&lt;some GUID&gt;@&lt;some filename&gt;
+</code></pre>
+<p>The <code>inetpub\\wwwroot</code> is the standard IIS webroot, and the folder <code>info.skat.dk</code> tells me that this is for that hostname. Presumably, there are other hostnames on this server, but I did not investigate that.</p>
+<p>If I chose a GUID parameter with the name of <code>&lt;guid&gt;\..\..\</code>, I would probably be able to walk up into the webroot for <code>info.skat.dk</code>, and this is what I did with a dummy text file. This is called a <strong>path traversal vulnerability</strong>.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/dummy.png" width="2202px" height="574px">
+    </div>
+
+    
+</figure>
+</p>
+<p><strong>Oh shit</strong>, this indicates the file was put there in the webroot. Could I access it?</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/dummy2.png" width="590px" height="76px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Okay, this is not SUPER bad, but it&rsquo;s pretty bad. I could, for example, upload an <code>.html</code> file and do some proper phishing, or even worse, upload an <code>.aspx</code> file to try to get code execution on the server. So I tried uploading a minimal execution example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>&lt;%@ Page Language=&#34;C#&#34; %&gt;
+</span></span><span style="display:flex;"><span>&lt;%@ Import Namespace=&#34;System.Diagnostics&#34; %&gt;
+</span></span><span style="display:flex;"><span>&lt;%@ Import Namespace=&#34;System.IO&#34; %&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;script runat=&#34;server&#34;&gt;
+</span></span><span style="display:flex;"><span>    protected void Page_Load(object sender, EventArgs e)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        Process proc = new Process();
+</span></span><span style="display:flex;"><span>        proc.StartInfo.FileName = &#34;cmd.exe&#34;;
+</span></span><span style="display:flex;"><span>        proc.StartInfo.Arguments = &#34;/c whoami&#34;;
+</span></span><span style="display:flex;"><span>        proc.StartInfo.UseShellExecute = false;
+</span></span><span style="display:flex;"><span>        proc.StartInfo.RedirectStandardOutput = true;
+</span></span><span style="display:flex;"><span>        proc.Start();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        string output = proc.StandardOutput.ReadToEnd();
+</span></span><span style="display:flex;"><span>        proc.WaitForExit();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Response.Write(&#34;&lt;pre&gt;&#34; + Server.HtmlEncode(output) + &#34;&lt;/pre&gt;&#34;);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>&lt;/script&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;html&gt;
+</span></span><span style="display:flex;"><span>&lt;head&gt;
+</span></span><span style="display:flex;"><span>    &lt;title&gt;Whoami Command Output&lt;/title&gt;
+</span></span><span style="display:flex;"><span>&lt;/head&gt;
+</span></span><span style="display:flex;"><span>&lt;body&gt;
+</span></span><span style="display:flex;"><span>    &lt;h1&gt;Output of &#39;whoami&#39; command:&lt;/h1&gt;
+</span></span><span style="display:flex;"><span>&lt;/body&gt;
+</span></span><span style="display:flex;"><span>&lt;/html&gt;
+</span></span></code></pre></div><p>Which would simply run the <code>whoami</code> command. I edited the filename to be some random filename (so no one would find it) ending with <code>.aspx</code> and tried to upload it. This gave the following error:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/aspxerror.png" width="1062px" height="172px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Alright, this is good, but there are potentially hundreds of ways around it:</p>
+<ol>
+<li>Setting an empty filename but using the <code>guid</code> parameter to set the <code>.aspx</code> extension</li>
+<li>Adding a null byte after <code>.aspx</code> but before some known extension like <code>.jpg</code></li>
+<li>Case variation bypasses such as <code>file.AsPx</code></li>
+<li>Using semicolon separators: <code>file.asp;.jpg</code> or <code>payload.aspx;.png</code></li>
+</ol>
+<p>And I could go on&hellip; But at this point, it became a curious poke to an actual hacking attempt, and I had to remind myself not to get carried away. There was naturally a vulnerability present that I should alert them about.</p>
+<h3 class="heading" id="responsible-disclosure">
+  Responsible Disclosure
+  <a class="anchor" href="#responsible-disclosure">#</a>
+</h3>
+<p>When wanting to get in touch with the security department of different organizations, you can check if they have a <code>security.txt</code>, either directly in the webroot or at <code>/.well-known/security.txt</code>. SKAT had neither. Additionally, searching for security did not bring up any relevant contacts really—kind of hard to know who to contact.</p>
+<p>I don&rsquo;t know anyone who works for skat.dk, but thankfully I am part of <strong>Kalmarunionen</strong>, the CTF team, which is well connected, so I wrote in the Discord if someone knew who I could contact:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/skat-upload/disdcosod.png" width="1249px" height="440px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Thankfully <em>Lunn</em> got me a contact and set us up on Signal. I also included <em>HestenettetDK</em> shitposting because naturally that&rsquo;s part of it.</p>
+<p>From here, I was very impressed with how seriously they took it. They asked for mine and Jan&rsquo;s IP so they could do an investigation to see if this was in any way abused. Shortly thereafter, I noticed that the <code>@dummy.txt</code> file was removed. I assume they have patched the endpoint now, but I did not go back to check since they didn&rsquo;t ask me to.</p>
+<h3 class="heading" id="outro">
+  Outro
+  <a class="anchor" href="#outro">#</a>
+</h3>
+<p>I think it&rsquo;s really important to let companies and institutions know if you find something in their tech that is vulnerable, but at the same time, you should not go out and about trying to test any system you come across. Additionally, I want to emphasize—not to come off as <em>holier-than-thou</em>—that in this scenario, it is not appropriate to ask for bounties or other forms of compensation. I mention this since I am an avid bug bounty hunter and usually do get compensated for this type of work, but in this context, this agreement was not established, especially since no vulnerability disclosure process was mentioned from SKAT&rsquo;s side.</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

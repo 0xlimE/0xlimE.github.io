@@ -6,14 +6,49 @@
     <description>Recent content in Posts on 0xlime Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 14 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Jun 2025 11:17:42 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Analysis of security.txt Adoption Across .dk Domains</title>
+      <link>http://localhost:1313/posts/securitytxt/</link>
+      <pubDate>Tue, 24 Jun 2025 11:17:42 +0200</pubDate>
+      <guid>http://localhost:1313/posts/securitytxt/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;“When security risks in web services are discovered by independent security researchers who understand the severity of the risk, they often lack the channels to disclose them properly. As a result, security issues may be left unreported. security.txt defines a standard to help organizations define the process for security researchers to disclose security vulnerabilities securely.”&lt;/p&gt;&#xA;&lt;p&gt;– &lt;a href=&#34;https://securitytxt.org/&#34;&gt;securitytxt.org&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;p&gt;I have recently been curious about how mature Danish companies are in regards to their vulnerability disclosure process. &lt;code&gt;security.txt&lt;/code&gt; files provide a standardized way for organizations to communicate this process to security researchers. As defined in &lt;a href=&#34;https://www.rfc-editor.org/rfc/rfc9116.html&#34;&gt;RFC 9116&lt;/a&gt;, these files should be accessible at either &lt;code&gt;/security.txt&lt;/code&gt; or &lt;code&gt;/.well-known/security.txt&lt;/code&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Path traversal vulnerability on info.skat.dk</title>
+      <link>http://localhost:1313/posts/skat-upload/</link>
+      <pubDate>Mon, 26 May 2025 16:17:42 +0200</pubDate>
+      <guid>http://localhost:1313/posts/skat-upload/</guid>
+      <description>&lt;h3 class=&#34;heading&#34; id=&#34;preface&#34;&gt;&#xA;  Preface&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#preface&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h3&gt;&#xA;&lt;p&gt;I do not endorse performing unsolicited or unauthorized security testing of websites or systems. This article describes a situation where a friend shared an error message they encountered while legitimately using a service, which contained indicators suggesting a potential security vulnerability. Looking closer, this proved to be the case.&lt;/p&gt;&#xA;&lt;p&gt;I want to emphasize that I do not actively seek vulnerabilities in systems where I lack explicit permission to test. However, when obvious security flaws are discovered through normal use or observation, I believe there is an ethical responsibility to report them responsibly to help improve overall security.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Security Research - Patch diffing to create a Proof of Concept - Bringing an &#39;Out of Scope&#39; back &#39;In Scope&#39; for a bounty!</title>
+      <link>http://localhost:1313/posts/ndaydev/</link>
+      <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ndaydev/</guid>
+      <description>&lt;h2 class=&#34;heading&#34; id=&#34;before-reading&#34;&gt;&#xA;  Before reading&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#before-reading&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Do note that I have replaced some details in this blogpost, such as the name of the company, the name of the software, the CVE in question and the discovered vulnerable endpoint. This post is about writing an n-day and not about outing some company or software vendor :-) This means that the enterprise software is not &lt;code&gt;Enterbuild&lt;/code&gt;, I am not doing bug bounty hunting for &lt;code&gt;company.com&lt;/code&gt;, and there is no such endpoint as &lt;code&gt;/operator-hash&lt;/code&gt;, these are all just placeholders so as to not leak information about the targets, just to clarify.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 2</title>
+      <link>http://localhost:1313/posts/ready_bug_bounty2/</link>
+      <pubDate>Wed, 02 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ready_bug_bounty2/</guid>
+      <description>&lt;p&gt;&lt;em&gt;&lt;strong&gt;This post was originally made for the bugbounty subreddit that I lurk extensively, see it here&lt;/strong&gt;&lt;/em&gt;: &lt;a href=&#34;https://www.reddit.com/r/bugbounty/comments/1jlqpo1/a_fundamental_misunderstanding_on_when_you_are/&#34;&gt;https://www.reddit.com/r/bugbounty/comments/1jlqpo1/a_fundamental_misunderstanding_on_when_you_are/&lt;/a&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Some weeks ago I made this post: &lt;a href=&#34;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&#34;&gt;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&lt;/a&gt; which outlined my opinion that you do not need to complete a full HackTheBox or Portswigger course to jump into hunting for vulnerabilities. The central part of the post was this point: &lt;strong&gt;You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
     <item>
       <title>De Danske Cybermesterskaber 2025 - Qualifiers - Film Til Dig</title>
       <link>http://localhost:1313/posts/film-til-dig/</link>
       <pubDate>Fri, 14 Mar 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/film-til-dig/</guid>
       <description>&lt;h1 class=&#34;heading&#34; id=&#34;film-til-dig&#34;&gt;&#xA;  Film Til Dig&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#film-til-dig&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;preface&#34;&gt;&#xA;  Preface&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#preface&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;I was asked to create a &lt;code&gt;hard&lt;/code&gt; web challenge for this years qualifiers for De Danske Cybermesterskaber, I am every year so excited for this event and to see the young brilliant Danish minds and their hacking capabilities. Since I only do &lt;code&gt;web&lt;/code&gt; I wanted to get something down that would be a challenge to most, and get at most 10 solves, which seemed to succeeed across categories (&lt;em&gt;Junior&lt;/em&gt;, &lt;em&gt;Senior&lt;/em&gt;, &lt;em&gt;Open&lt;/em&gt;, &lt;em&gt;Nordics&lt;/em&gt;). So if you are here because you struggled with the challenge, thanks for spending time on it, it is really a cool experience to create something that someone else spends time on.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 1</title>
+      <link>http://localhost:1313/posts/ready_bug_bounty1/</link>
+      <pubDate>Sun, 02 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ready_bug_bounty1/</guid>
+      <description>&lt;p&gt;&lt;em&gt;&lt;strong&gt;This post was originally made for the bugbounty subreddit that I lurk extensively, see it here&lt;/strong&gt;&lt;/em&gt;: &lt;a href=&#34;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&#34;&gt;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&lt;/a&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;This question comes up so often on this subreddit:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&amp;ldquo;When am I ready for BBH?&amp;rdquo;&lt;/li&gt;&#xA;&lt;li&gt;&amp;ldquo;Okay, after finishing CBBH, am I then ready for bug bounty hunting?&amp;rdquo;&lt;/li&gt;&#xA;&lt;li&gt;&amp;ldquo;I&amp;rsquo;ve studied intricate dynamic analysis of JavaScript in my PhD at MIT, am I ready for bug bounty hunting?&amp;rdquo;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;These questions all have the same answer: &lt;strong&gt;You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title>TDC NET CTF 2023 - clone2own - pokemon1</title>

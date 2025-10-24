@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 2 | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/ready_bug_bounty2/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/ready_bug_bounty2/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 2">
+  <meta property="og:description" content="This post was originally made for the bugbounty subreddit that I lurk extensively, see it here: https://www.reddit.com/r/bugbounty/comments/1jlqpo1/a_fundamental_misunderstanding_on_when_you_are/
+Some weeks ago I made this post: https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/ which outlined my opinion that you do not need to complete a full HackTheBox or Portswigger course to jump into hunting for vulnerabilities. The central part of the post was this point: You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-04-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-02T00:00:00+00:00">
+    <meta property="article:tag" content="Bug Bounty">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.38f3885a8781b7bd7780021cc7bda42e40b3f6dfa0a57da2bbf7a80f944d1c5e.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/ready_bug_bounty2/">A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 2</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 2</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2025-04-02T00:00:00&#43;00:00">April 2, 2025</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p><em><strong>This post was originally made for the bugbounty subreddit that I lurk extensively, see it here</strong></em>: <a href="https://www.reddit.com/r/bugbounty/comments/1jlqpo1/a_fundamental_misunderstanding_on_when_you_are/">https://www.reddit.com/r/bugbounty/comments/1jlqpo1/a_fundamental_misunderstanding_on_when_you_are/</a></p>
+<hr>
+<p>Some weeks ago I made this post: <a href="https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/">https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/</a> which outlined my opinion that you do not need to complete a full HackTheBox or Portswigger course to jump into hunting for vulnerabilities. The central part of the post was this point: <strong>You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.</strong></p>
+<p>After now spending some time on this subreddit and various discord servers, talking to different <em>triagers</em>, I now want to make an amendment to my original statement.</p>
+<p><strong>You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program <em>AND have the minimal understanding of what impactful vulnerabilities are.</em></strong></p>
+<p>From speaking with triagers and program managers, there is simply an overwhelming amount of non-impactful and useless findings that are being sent through these programs every single day. I recently saw a post on here about a person who had managed to get an ATO as informative, how? The guy thought that it was an actual finding that stealing someone&rsquo;s auth cookie (PHPSESSID) could lead to account takeover. This is a fundamental non-understanding of web technologies and how authentication works. This person was, according to the original statement, &ldquo;ready&rdquo; for bug bounty hunting, but the reality is that they were not and falsely hyped themselves up for a critical bug but in reality just ended up disappointed and wasting triager time.</p>
+<p>So when can you actually know if you are &ldquo;ready&rdquo;? Well, you need to have a basic understanding of web (because it is mostly web) technologies and what constitutes an <strong>impactful vulnerability</strong>. This means that you need to be able to differentiate between what Burpsuite and ChatGPT hype up as a &ldquo;Severe vulnerability in the form of a missing <code>x-xss-protection</code> header&rdquo; and an actual vulnerability.</p>
+<p>I would like to highlight 3 steps you should follow before starting to send in reports to bug bounty programs.</p>
+<p><strong>The first step</strong> is to understand how web applications actually work. You need to know the basics of HTTP requests/responses, cookies, sessions, and authentication mechanisms. If you don&rsquo;t understand that a session cookie is literally how the server identifies you and that stealing it naturally leads to account access (which isn&rsquo;t a vulnerability), you&rsquo;re missing fundamental knowledge. Learn how browsers interact with servers, how data is transmitted, and how user authentication is maintained across requests. This foundation will help you distinguish between normal application behavior and actual security issues.</p>
+<p><strong>The second step</strong> is to get a fundamental understanding of what constitutes an impactful finding. This is where most beginners fail miserably. You must be able to differentiate between what&rsquo;s technically possible and what constitutes an actual security risk. &ldquo;I can see my own user ID in a request&rdquo; is not a vulnerability. Learn to ask: &ldquo;What actual harm could come from this?&rdquo;</p>
+<p><strong>The third step</strong> is to <strong>READ THE SCOPE OF THE PROGRAM</strong>. Most often there is a long list of Out-of-scope and non-impactful vulnerabilities, such as <code>physical attacks</code>, <code>missing security headers</code>, and <code>phishing</code>. Additionally, it is also just in general a good idea to read and understand the scope thoroughly to not submit out-of-scope vulnerabilities.</p>
+<p>The /r/bugbounty subreddit is filled with people complaining about &ldquo;informational&rdquo; ratings or rejected reports because they fundamentally misunderstand what constitutes a vulnerability. They create elaborate reports about theoretical issues (like the guy who reported that the site was available over http instead of https) with minimal real-world impact, then get frustrated when programs don&rsquo;t pay out.</p>
+<p>Remember: Bug bounty programs exist to identify and fix actual security risks, not to serve as paid training grounds.</p>
+<p>You don&rsquo;t need to be an expert in everything, but you do need to understand the basics of what you&rsquo;re doing and why it matters. Without this foundation, you&rsquo;re essentially throwing darts blindfolded and hoping to hit something valuable, and wasting triagers and program managers time in the process.</p>
+<p>TL;DR: You don&rsquo;t need to be a security expert to start bug bounty hunting, but you do need a basic understanding of web security concepts, impact assessment, and professional conduct. Without these, you&rsquo;ll likely join the chorus of voices complaining about rejections rather than celebrating valid findings.</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

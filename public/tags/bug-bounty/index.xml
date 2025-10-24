@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bug Bounty on 0xlime Blog</title>
+    <link>http://localhost:1313/tags/bug-bounty/</link>
+    <description>Recent content in Bug Bounty on 0xlime Blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 02 Apr 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/bug-bounty/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 2</title>
+      <link>http://localhost:1313/posts/ready_bug_bounty2/</link>
+      <pubDate>Wed, 02 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ready_bug_bounty2/</guid>
+      <description>&lt;p&gt;&lt;em&gt;&lt;strong&gt;This post was originally made for the bugbounty subreddit that I lurk extensively, see it here&lt;/strong&gt;&lt;/em&gt;: &lt;a href=&#34;https://www.reddit.com/r/bugbounty/comments/1jlqpo1/a_fundamental_misunderstanding_on_when_you_are/&#34;&gt;https://www.reddit.com/r/bugbounty/comments/1jlqpo1/a_fundamental_misunderstanding_on_when_you_are/&lt;/a&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;Some weeks ago I made this post: &lt;a href=&#34;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&#34;&gt;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&lt;/a&gt; which outlined my opinion that you do not need to complete a full HackTheBox or Portswigger course to jump into hunting for vulnerabilities. The central part of the post was this point: &lt;strong&gt;You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 1</title>
+      <link>http://localhost:1313/posts/ready_bug_bounty1/</link>
+      <pubDate>Sun, 02 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ready_bug_bounty1/</guid>
+      <description>&lt;p&gt;&lt;em&gt;&lt;strong&gt;This post was originally made for the bugbounty subreddit that I lurk extensively, see it here&lt;/strong&gt;&lt;/em&gt;: &lt;a href=&#34;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&#34;&gt;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&lt;/a&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;This question comes up so often on this subreddit:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&amp;ldquo;When am I ready for BBH?&amp;rdquo;&lt;/li&gt;&#xA;&lt;li&gt;&amp;ldquo;Okay, after finishing CBBH, am I then ready for bug bounty hunting?&amp;rdquo;&lt;/li&gt;&#xA;&lt;li&gt;&amp;ldquo;I&amp;rsquo;ve studied intricate dynamic analysis of JavaScript in my PhD at MIT, am I ready for bug bounty hunting?&amp;rdquo;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;These questions all have the same answer: &lt;strong&gt;You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

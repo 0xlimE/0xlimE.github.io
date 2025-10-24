@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>N-Day Development on 0xlime Blog</title>
+    <link>http://localhost:1313/tags/n-day-development/</link>
+    <description>Recent content in N-Day Development on 0xlime Blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 04 Apr 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/n-day-development/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Security Research - Patch diffing to create a Proof of Concept - Bringing an &#39;Out of Scope&#39; back &#39;In Scope&#39; for a bounty!</title>
+      <link>http://localhost:1313/posts/ndaydev/</link>
+      <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ndaydev/</guid>
+      <description>&lt;h2 class=&#34;heading&#34; id=&#34;before-reading&#34;&gt;&#xA;  Before reading&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#before-reading&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Do note that I have replaced some details in this blogpost, such as the name of the company, the name of the software, the CVE in question and the discovered vulnerable endpoint. This post is about writing an n-day and not about outing some company or software vendor :-) This means that the enterprise software is not &lt;code&gt;Enterbuild&lt;/code&gt;, I am not doing bug bounty hunting for &lt;code&gt;company.com&lt;/code&gt;, and there is no such endpoint as &lt;code&gt;/operator-hash&lt;/code&gt;, these are all just placeholders so as to not leak information about the targets, just to clarify.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
