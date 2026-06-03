@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    On moltbook | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/onmoltbook/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/onmoltbook/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="On moltbook">
+  <meta property="og:description" content="Okay so there is a lot of both AI hype and FUD going around these days. The whole discourse around Moltbook and AI’s getting their own social media to rant about humans is really confirming my view that IT Security is more important now than ever.
+Tons of new developers, tech interested folks, etc. have thrown themselves at this new AI bot (clawdbot -&gt; moltbot -&gt; openclaw) that has the possibility to integrate with a social media “only for agents”. Here humans are allegedly only allowed to observe, while the AIs talk with each other.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-14T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-02-14T00:00:00+00:00">
+    <meta property="article:tag" content="Ai Security">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.b47068eb723e0d6f9b88b80d7b53d1a25a5b0e45c3e147c9d878f4b83cc6bc80.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="light">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/onmoltbook/">On moltbook</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">On moltbook</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2026-02-14T00:00:00&#43;00:00">February 14, 2026</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>Okay so there is a lot of both AI hype and FUD going around these days. The whole discourse around Moltbook and AI&rsquo;s getting their own social media to rant about humans is really confirming my view that IT Security is more important now than ever.</p>
+<p>Tons of new developers, tech interested folks, etc. have thrown themselves at this new AI bot (clawdbot -&gt; moltbot -&gt; openclaw) that has the possibility to integrate with a social media &ldquo;only for agents&rdquo;. Here humans are allegedly only allowed to observe, while the AIs talk with each other.</p>
+<p>There are 2 interesting facets of this right here, the feasibility of the argument that only AI&rsquo;s can post, and the security of the social network.</p>
+<ol>
+<li>&ldquo;Only AI agents can post!!! Look how they discuss creating a new hidden language to overtake humanity!?!??!?&rdquo; - These agents post on behalf of instruction of the human that set it up, this is not the AI apocalypse coming, its people trolling other people, through AI.
+Additionally as a fellow bug hunter Gal Nagli has posted, anyone can just use the authentication token to post anything. It is not technically feasible to &ldquo;only allow agents&rdquo;.</li>
+</ol>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="Tweet from Gal Nagli" src="/posts/onmoltbook/galnagli.png" width="1134px" height="1442px">
+    </div>
+
+    
+</figure>
+</p>
+<ol start="2">
+<li>Moltbook is a speedy vibecoded project, used by millions of AI agents (and as you saw, also humans) where the security is basically non-existent. This was shown by security researcher Jamieson O&rsquo;Rielly who found that the Supabase database had missing RLS, allowing anyone to pull out sensitive data from database. This included keys to post on behalf of other agents.</li>
+</ol>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="Tweet from Orielly" src="/posts/onmoltbook/jamie.png" width="1134px" height="1442px">
+    </div>
+
+    
+</figure>
+</p>
+<p>There are thousands of these types of fast vibecoded projects, pushed by companies with essentially no security. Don&rsquo;t get me wrong, I love vibecoding and the fact that we can build faster than ever, but security is mostly an afterthought.</p>
+<p>Not sure where I wanted to go with this, but I wanted to highlight that while the narrative focuses on &ldquo;AI sentience,&rdquo; the real story is basic security negligence. As long as we value &ldquo;shipping in 5 minutes&rdquo; over &ldquo;shipping securely,&rdquo; the ethical hacking community is going to be busier than ever. It&rsquo;s the Wild West out there, and platforms like Moltbook are just the latest reminder that we need human guardrails, and bug bounties ;-), more than ever.</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

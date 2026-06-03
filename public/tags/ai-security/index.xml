@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ai Security on 0xlime Blog</title>
+    <link>http://localhost:1313/tags/ai-security/</link>
+    <description>Recent content in Ai Security on 0xlime Blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 14 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/ai-security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On moltbook</title>
+      <link>http://localhost:1313/posts/onmoltbook/</link>
+      <pubDate>Sat, 14 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/onmoltbook/</guid>
+      <description>&lt;p&gt;Okay so there is a lot of both AI hype and FUD going around these days. The whole discourse around Moltbook and AI&amp;rsquo;s getting their own social media to rant about humans is really confirming my view that IT Security is more important now than ever.&lt;/p&gt;&#xA;&lt;p&gt;Tons of new developers, tech interested folks, etc. have thrown themselves at this new AI bot (clawdbot -&amp;gt; moltbot -&amp;gt; openclaw) that has the possibility to integrate with a social media &amp;ldquo;only for agents&amp;rdquo;. Here humans are allegedly only allowed to observe, while the AIs talk with each other.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

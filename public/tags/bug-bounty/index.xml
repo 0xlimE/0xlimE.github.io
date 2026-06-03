@@ -6,8 +6,15 @@
     <description>Recent content in Bug Bounty on 0xlime Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 02 Apr 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 09 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/bug-bounty/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Scanning .dk domains for react2shell</title>
+      <link>http://localhost:1313/posts/react2shelldk/</link>
+      <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/react2shelldk/</guid>
+      <description>&lt;p&gt;Yesterday — Sunday evening — was spent alerting Danish companies that they were vulnerable to &lt;strong&gt;React2shell&lt;/strong&gt; (&lt;code&gt;CVE-2025-55182&lt;/code&gt; and &lt;code&gt;CVE-2025-66478&lt;/code&gt;), a recently dropped CVSS 10.0 vulnerability affecting a large portion of websites on the internet, with observed active exploitation already in the wild (&lt;a href=&#34;https://react2shell.com/&#34;&gt;react2shell.com&lt;/a&gt;).&lt;/p&gt;&#xA;&lt;p&gt;What does this mean in practice? It means that if your webpage is vulnerable, then there is a decent chance that your site has been, or soon will be, compromised. I am not trying to paint a scary scenario for hype — the scripts to obtain remote code execution on a vulnerable site are already out there, and they are being used.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>A fundamental misunderstanding on when you are &#34;ready&#34; for bug bounty hunting. Part 2</title>
       <link>http://localhost:1313/posts/ready_bug_bounty2/</link>

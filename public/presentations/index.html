@@ -45,7 +45,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.38f3885a8781b7bd7780021cc7bda42e40b3f6dfa0a57da2bbf7a80f944d1c5e.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.b47068eb723e0d6f9b88b80d7b53d1a25a5b0e45c3e147c9d878f4b83cc6bc80.css" media="all">
 
 
 
@@ -57,7 +57,9 @@
 
 
 
-<body class="auto">
+
+
+<body class="light">
 
   <div class="content">
     <header>
@@ -158,7 +160,153 @@
   
 
   <div class="single-content">
-    <p>Welcome to my presentations archive. Below you&rsquo;ll find downloadable materials from my talks and workshops.</p>
+    <div class="carousel" id="carousel-1780496287845579000" style="--carousel-height: 340px;">
+  <div class="carousel-track" tabindex="0">
+    <figure class="carousel-slide" data-index="0">
+      <img src="/img/presentations/1.png" alt="Presentation photo 1" loading="lazy" />
+    </figure>
+    <figure class="carousel-slide" data-index="1">
+      <img src="/img/presentations/1763549442900.jpg" alt="Presentation photo 2" loading="lazy" />
+    </figure>
+    <figure class="carousel-slide" data-index="2">
+      <img src="/img/presentations/1763549443828.jpg" alt="Presentation photo 3" loading="lazy" />
+    </figure>
+    <figure class="carousel-slide" data-index="3">
+      <img src="/img/presentations/1763549444149.jpg" alt="Presentation photo 4" loading="lazy" />
+    </figure>
+    <figure class="carousel-slide" data-index="4">
+      <img src="/img/presentations/1763549444925.jpg" alt="Presentation photo 5" loading="lazy" />
+    </figure>
+    <figure class="carousel-slide" data-index="5">
+      <img src="/img/presentations/1763549444934.jpg" alt="Presentation photo 6" loading="lazy" />
+    </figure>
+    <figure class="carousel-slide" data-index="6">
+      <img src="/img/presentations/2.png" alt="Presentation photo 7" loading="lazy" />
+    </figure>
+  </div>
+  <button class="carousel-nav carousel-prev" aria-label="Previous image" type="button">&#x2039;</button>
+  <button class="carousel-nav carousel-next" aria-label="Next image" type="button">&#x203A;</button>
+  <div class="carousel-dots" role="tablist">
+    <button class="carousel-dot active" data-target="0" aria-label="Go to image 1" type="button"></button>
+    <button class="carousel-dot" data-target="1" aria-label="Go to image 2" type="button"></button>
+    <button class="carousel-dot" data-target="2" aria-label="Go to image 3" type="button"></button>
+    <button class="carousel-dot" data-target="3" aria-label="Go to image 4" type="button"></button>
+    <button class="carousel-dot" data-target="4" aria-label="Go to image 5" type="button"></button>
+    <button class="carousel-dot" data-target="5" aria-label="Go to image 6" type="button"></button>
+    <button class="carousel-dot" data-target="6" aria-label="Go to image 7" type="button"></button>
+  </div>
+  <div class="carousel-counter"><span class="carousel-current">1</span> / 7</div>
+</div>
+
+<script>
+(function () {
+  const root = document.getElementById('carousel-1780496287845579000');
+  if (!root) return;
+  const track = root.querySelector('.carousel-track');
+  const slides = Array.from(root.querySelectorAll('.carousel-slide'));
+  const dots = Array.from(root.querySelectorAll('.carousel-dot'));
+  const counter = root.querySelector('.carousel-current');
+  const prev = root.querySelector('.carousel-prev');
+  const next = root.querySelector('.carousel-next');
+  if (slides.length < 2) return;
+
+  const AUTOPLAY_MS = 4000;
+  let current = 0;
+  let autoplayTimer = null;
+
+  function goTo(i, smooth) {
+    current = ((i % slides.length) + slides.length) % slides.length;
+    const slide = slides[current];
+    const trackRect = track.getBoundingClientRect();
+    const slideRect = slide.getBoundingClientRect();
+    const delta = (slideRect.left - trackRect.left) - (trackRect.width - slideRect.width) / 2;
+    track.scrollTo({
+      left: track.scrollLeft + delta,
+      behavior: smooth === false ? 'auto' : 'smooth'
+    });
+    update();
+  }
+
+  function update() {
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    if (counter) counter.textContent = String(current + 1);
+  }
+
+  function detectCurrentFromScroll() {
+    const trackRect = track.getBoundingClientRect();
+    const center = trackRect.left + trackRect.width / 2;
+    let best = 0, bestDist = Infinity;
+    slides.forEach((s, i) => {
+      const r = s.getBoundingClientRect();
+      const c = r.left + r.width / 2;
+      const d = Math.abs(c - center);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    if (best !== current) { current = best; update(); }
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => goTo(current + 1), AUTOPLAY_MS);
+  }
+  function stopAutoplay() {
+    if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
+  }
+
+  prev.addEventListener('click', () => { goTo(current - 1); stopAutoplay(); });
+  next.addEventListener('click', () => { goTo(current + 1); stopAutoplay(); });
+  dots.forEach(d => d.addEventListener('click', () => {
+    goTo(parseInt(d.dataset.target, 10));
+    stopAutoplay();
+  }));
+
+  let scrollTimer;
+  track.addEventListener('scroll', () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(detectCurrentFromScroll, 80);
+  }, { passive: true });
+
+  track.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(current - 1); stopAutoplay(); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); stopAutoplay(); }
+  });
+
+  root.addEventListener('mouseenter', stopAutoplay);
+  root.addEventListener('mouseleave', startAutoplay);
+  root.addEventListener('touchstart', stopAutoplay, { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAutoplay(); else startAutoplay();
+  });
+
+  startAutoplay();
+})();
+</script>
+<p>Welcome to my presentations archive. Below you&rsquo;ll find downloadable materials from my talks and workshops.</p>
+<h3 class="heading" id="state-of-bug-bounty-2026-danish-may-2026">
+  State of Bug Bounty 2026 (Danish) (May 2026)
+  <a class="anchor" href="#state-of-bug-bounty-2026-danish-may-2026">#</a>
+</h3>
+<p>Presentation made for Computerworld Cyber Threats in Copenhagen May 2026, an overview of the bug bounty hunting landscape in 2026
+<a href="/files/State%20of%20bb%202026%20%28danish%29.pdf">Download Presentation</a></p>
+<h3 class="heading" id="advanced-bug-bounty-hunting-english-february-2026">
+  Advanced Bug Bounty Hunting (English) (February 2026)
+  <a class="anchor" href="#advanced-bug-bounty-hunting-english-february-2026">#</a>
+</h3>
+<p>My follow up presentation for the next in the series on getting started with bug bounty hunting. This presentation is quite dense with lots of information. Especially on recon
+<a href="/files/Advanced%20bbh%20english.pdf">Download Presentation</a></p>
+<h3 class="heading" id="from-cvr-to-securitytxt-november-2025">
+  From CVR to security.txt (November 2025)
+  <a class="anchor" href="#from-cvr-to-securitytxt-november-2025">#</a>
+</h3>
+<p>My Copenhagen Bsides presentation on the current state of security.txt adaptation in Danish companies. Video here: <a href="https://vimeo.com/1148470593">https://vimeo.com/1148470593</a>
+<a href="/files/from%20cvr%20to%20security.txt.pdf">Download Presentation</a></p>
+<h3 class="heading" id="live-hacking-english-october-2025">
+  Live Hacking (English) (October 2025)
+  <a class="anchor" href="#live-hacking-english-october-2025">#</a>
+</h3>
+<p>The slides for my live hacking show, showcasing how I break into a fictional company and how you may protect yourself. English and Danish versions
+<a href="/files/Live%20Hacking-en.pdf">English Presentation</a>
+<a href="/files/Live%20Hacking-da.pdf">Danish Presentation</a></p>
 <h3 class="heading" id="bug-bounty-hunting-introduction-short-and-danish-march-2025">
   Bug Bounty Hunting introduction (Short and Danish) (March 2025)
   <a class="anchor" href="#bug-bounty-hunting-introduction-short-and-danish-march-2025">#</a>
@@ -214,7 +362,7 @@
 </h3>
 <p>Me and my partners presentation on privacy preserving machine learning, my focus was on the cryptographic assumptions on sharing secrets over the network. (Master thesis for my first masters in Computer Science)
 <a href="/files/Thesis_pres_cool.pdf">Download Slides</a>
-<a href="/files/Thesis___Privacy_Preserving_Machine_Learning.pdff">Download Paper</a></p>
+<a href="/files/Thesis___Privacy_Preserving_Machine_Learning.pdf">Download Paper</a></p>
 
     
   </div>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Blog style preview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Body font candidates -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=JetBrains+Mono:wght@400;600&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+  /* ---------------- Control panel ---------------- */
+  :root {
+    --panel-bg: #1a1a1a;
+    --panel-fg: #e8e8e8;
+    --panel-border: #333;
+    --panel-accent: #4dabf7;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  .control-panel {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--panel-bg);
+    color: var(--panel-fg);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--panel-border);
+    z-index: 1000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .control-panel.collapsed .controls { display: none; }
+  .control-panel.collapsed { padding: 8px 20px; }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .control-panel.collapsed .panel-header { margin-bottom: 0; }
+  .panel-header h1 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .panel-header button {
+    background: transparent;
+    border: 1px solid var(--panel-border);
+    color: var(--panel-fg);
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+  }
+  .panel-header button:hover { background: #2a2a2a; }
+
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .control-group {
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .control-group > label {
+    display: block;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin-bottom: 6px;
+  }
+  .options { display: flex; flex-wrap: wrap; gap: 4px; }
+  .option {
+    padding: 4px 10px;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    cursor: pointer;
+    background: #222;
+    color: var(--panel-fg);
+    font-family: inherit;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .option:hover { background: #2a2a2a; }
+  .option.active {
+    background: var(--panel-accent);
+    border-color: var(--panel-accent);
+    color: #000;
+    font-weight: 600;
+  }
+
+  .summary-bar {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: #0d0d0d;
+    border-radius: 4px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    color: #aaa;
+    border: 1px solid var(--panel-border);
+  }
+  .summary-bar code { color: var(--panel-accent); }
+
+  /* ---------------- Page chrome (themed) ---------------- */
+  body {
+    padding-top: 240px; /* leaves room for the control panel */
+    transition: background 0.2s, color 0.2s;
+  }
+  body.panel-collapsed { padding-top: 60px; }
+
+  /* Page background themes */
+  body.bg-gray   { background: #f4f4f5; }
+  body.bg-cream  { background: #ece5d8; }
+  body.bg-white  { background: #ffffff; }
+  body.bg-ink    { background: #eceae5; }
+  body.bg-cool   { background: #eef2f6; }
+
+  /* Article card */
+  .article-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .article {
+    padding: 56px 64px;
+    color: #1f1f23;
+    transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+  }
+
+  /* Card themes (work with body bg above) */
+  body.card-shadow .article {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04),
+                0 8px 24px rgba(0,0,0,0.06);
+  }
+  body.card-cream .article {
+    background: #fbf7ee;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04),
+                0 8px 24px rgba(0,0,0,0.05);
+  }
+  body.card-border .article {
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+  }
+  body.card-flat .article {
+    background: transparent;
+  }
+  body.card-hairline .article {
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+  }
+
+  /* Fonts */
+  body.font-inter    .article { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  body.font-source   .article { font-family: 'Source Serif 4', Georgia, Cambria, "Times New Roman", serif; }
+  body.font-plex     .article { font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+  body.font-atkinson .article { font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, sans-serif; }
+  body.font-literata .article { font-family: 'Literata', Georgia, Cambria, serif; }
+  body.font-system   .article { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif; }
+
+  /* Text sizes */
+  body.size-16 .article { font-size: 16px; line-height: 1.65; }
+  body.size-15 .article { font-size: 15px; line-height: 1.65; }
+  body.size-14 .article { font-size: 14px; line-height: 1.7; }
+
+  /* Article element styles */
+  .article h1 {
+    font-size: 2em;
+    font-weight: 700;
+    margin: 0 0 0.4em;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .article .meta {
+    color: #6b6b70;
+    font-size: 0.85em;
+    margin-bottom: 2.5em;
+  }
+  .article h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 2.2em 0 0.7em;
+    letter-spacing: -0.005em;
+  }
+  .article h3 {
+    font-size: 1.15em;
+    font-weight: 600;
+    margin: 1.8em 0 0.6em;
+  }
+  .article p { margin: 0 0 1.1em; }
+  .article a {
+    color: #2563eb;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .article ul { padding-left: 1.4em; margin: 0 0 1.1em; }
+  .article li { margin: 0.25em 0; }
+
+  .article code {
+    font-family: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.88em;
+  }
+  .article p > code,
+  .article li > code {
+    background: #f3f3f3;
+    color: #c81e3e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #e6e6e6;
+  }
+  .article pre {
+    background: #282a36;
+    color: #f8f8f2;
+    padding: 18px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.86em;
+    line-height: 1.55;
+    margin: 1.5em 0;
+  }
+  .article pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border: none;
+  }
+  .article blockquote {
+    border-left: 3px solid #d0d0d0;
+    color: #5e5e63;
+    padding-left: 1em;
+    margin: 1.4em 0;
+  }
+  .article blockquote p { margin: 0.4em 0; }
+
+  .token-kw  { color: #ff79c6; }
+  .token-fn  { color: #50fa7b; }
+  .token-str { color: #f1fa8c; }
+  .token-com { color: #6272a4; font-style: italic; }
+  .token-num { color: #bd93f9; }
+
+  /* Demo: show how header + first card stack */
+  .site-header {
+    max-width: 760px;
+    margin: 30px auto 0;
+    padding: 0 20px;
+    font-family: inherit;
+  }
+  body.font-inter    .site-header { font-family: 'Inter', sans-serif; }
+  body.font-source   .site-header { font-family: 'Source Serif 4', serif; }
+  body.font-plex     .site-header { font-family: 'IBM Plex Sans', sans-serif; }
+  body.font-atkinson .site-header { font-family: 'Atkinson Hyperlegible', sans-serif; }
+  body.font-literata .site-header { font-family: 'Literata', serif; }
+  body.font-system   .site-header { font-family: -apple-system, sans-serif; }
+
+  .site-header .brand {
+    font-size: 2em;
+    font-weight: 700;
+    color: #1f1f23;
+    text-decoration: none;
+  }
+  .site-header nav {
+    margin-top: 0.5em;
+    font-size: 0.85em;
+    color: #6b6b70;
+  }
+  .site-header nav a {
+    color: #6b6b70;
+    margin-right: 1em;
+    text-decoration: none;
+  }
+  .site-header nav a:hover { color: #1f1f23; }
+</style>
+</head>
+<body class="bg-gray card-shadow font-inter size-16">
+
+<div class="control-panel" id="panel">
+  <div class="panel-header">
+    <h1>Blog style preview — pick what you like</h1>
+    <button id="toggle-panel">Collapse</button>
+  </div>
+  <div class="controls">
+    <div class="control-group">
+      <label>Body font</label>
+      <div class="options" data-axis="font">
+        <button class="option active" data-value="inter">Inter</button>
+        <button class="option" data-value="source">Source Serif</button>
+        <button class="option" data-value="plex">IBM Plex Sans</button>
+        <button class="option" data-value="atkinson">Atkinson</button>
+        <button class="option" data-value="system">System UI</button>
+        <button class="option" data-value="literata">Literata (current)</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Page background</label>
+      <div class="options" data-axis="bg">
+        <button class="option active" data-value="gray">Light gray</button>
+        <button class="option" data-value="cream">Warm beige</button>
+        <button class="option" data-value="white">Pure white</button>
+        <button class="option" data-value="ink">Paper / ink</button>
+        <button class="option" data-value="cool">Cool blue-gray</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Content card</label>
+      <div class="options" data-axis="card">
+        <button class="option active" data-value="shadow">White + soft shadow</button>
+        <button class="option" data-value="cream">Cream + shadow</button>
+        <button class="option" data-value="border">Subtle bg + border</button>
+        <button class="option" data-value="hairline">White + hairline</button>
+        <button class="option" data-value="flat">No card (flat)</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Body text size</label>
+      <div class="options" data-axis="size">
+        <button class="option active" data-value="16">16 px</button>
+        <button class="option" data-value="15">15 px</button>
+        <button class="option" data-value="14">14 px</button>
+      </div>
+    </div>
+  </div>
+  <div class="summary-bar" id="summary">
+    Selection: <code>font=inter</code> <code>bg=gray</code> <code>card=shadow</code> <code>size=16</code>
+  </div>
+</div>
+
+<header class="site-header">
+  <a href="#" class="brand">0xlime Blog</a>
+  <nav>
+    <a href="#">home</a>
+    <a href="#">posts</a>
+    <a href="#">presentations</a>
+    <a href="#">about</a>
+  </nav>
+</header>
+
+<div class="article-wrap">
+  <article class="article">
+    <h1>Exploiting a stack overflow in a custom protocol parser</h1>
+    <div class="meta">12 May 2026 · 8 min read · security · binary exploitation</div>
+
+    <p>
+      A while back I was poking at a small IoT device and noticed something
+      strange: it advertised a custom over-the-wire protocol on TCP port
+      <code>9000</code>. The first byte was a length prefix, the second a
+      command tag, and the rest was payload. Predictable, but the parser
+      had a subtle bug that turned out to be exploitable.
+    </p>
+
+    <p>
+      This post walks through how I found the vulnerability, built a working
+      exploit, and — because the device shipped with NX but no ASLR — pivoted
+      from a single-byte write to full RCE.
+    </p>
+
+    <h2>The protocol</h2>
+
+    <p>
+      Each packet starts with a single byte length field, followed by a
+      one-byte command code and up to 253 bytes of payload. The server
+      reads <code>n + 2</code> bytes and dispatches based on the command code.
+      Here's the relevant snippet I recovered from the firmware:
+    </p>
+
+<pre><code><span class="token-kw">void</span> <span class="token-fn">handle_packet</span>(<span class="token-kw">int</span> sock) {
+  <span class="token-kw">char</span> buf[<span class="token-num">256</span>];
+  uint8_t len;
+
+  <span class="token-com">// read 1 byte length prefix</span>
+  recv(sock, &amp;len, <span class="token-num">1</span>, <span class="token-num">0</span>);
+
+  <span class="token-com">// then read len bytes of payload — what could go wrong?</span>
+  recv(sock, buf, len + <span class="token-num">2</span>, <span class="token-num">0</span>);
+
+  <span class="token-fn">dispatch</span>(buf[<span class="token-num">0</span>], buf + <span class="token-num">1</span>, len);
+}</code></pre>
+
+    <p>
+      The bug is the <code>len + 2</code>. Because <code>len</code> is a
+      <code>uint8_t</code>, a value of <code>0xFE</code> reads exactly 256
+      bytes into a 256-byte buffer (fine), but <code>0xFF</code> causes a
+      one-byte overflow past the end of the stack frame. That single byte
+      lands right on the saved frame pointer.
+    </p>
+
+    <h3>Setting up the exploit</h3>
+
+    <p>I had three things going for me:</p>
+
+    <ul>
+      <li>No stack canaries on this binary</li>
+      <li>NX was enabled, so shellcode on the stack was out</li>
+      <li>ASLR was <em>disabled</em>, which made ROP gadget addresses stable</li>
+    </ul>
+
+    <p>
+      First step was to find a useful gadget chain. I used
+      <a href="#">ROPgadget</a> to dump candidates, then filtered for
+      anything that touched <code>r0</code> and <code>pc</code> together.
+    </p>
+
+    <blockquote>
+      <p>
+        A single byte overflow doesn't sound like much, but if you can
+        nudge a saved frame pointer into a region <em>you</em> control,
+        you effectively gain a stack pivot — and from there, everything
+        is fair game.
+      </p>
+    </blockquote>
+
+    <h2>Pivoting with one byte</h2>
+
+    <p>
+      The trick was getting the device to allocate a second buffer at a
+      predictable address, then overwriting the low byte of the saved
+      frame pointer to land inside it. The full exploit was about 40
+      lines of Python:
+    </p>
+
+<pre><code><span class="token-kw">import</span> socket, struct
+
+s = socket.socket()
+s.connect((target, <span class="token-num">9000</span>))
+
+<span class="token-com"># prime the heap with our ROP chain</span>
+s.send(<span class="token-fn">build_priming_packet</span>(chain))
+
+<span class="token-com"># trigger the one-byte overflow</span>
+payload = <span class="token-str">b"A"</span> * <span class="token-num">255</span> + <span class="token-str">b"\x80"</span>
+s.send(<span class="token-fn">bytes</span>([<span class="token-num">0xff</span>, <span class="token-num">0x01</span>]) + payload)</code></pre>
+
+    <p>
+      And that was enough to drop into a shell. The full PoC and a writeup
+      of the gadget chain are in the repo linked at the top.
+    </p>
+  </article>
+</div>
+
+<script>
+  const panel = document.getElementById('panel');
+  const summary = document.getElementById('summary');
+  const toggleBtn = document.getElementById('toggle-panel');
+
+  const state = { font: 'inter', bg: 'gray', card: 'shadow', size: '16' };
+
+  function applyState() {
+    document.body.className = `bg-${state.bg} card-${state.card} font-${state.font} size-${state.size}` + (panel.classList.contains('collapsed') ? ' panel-collapsed' : '');
+    summary.innerHTML = 'Selection: ' +
+      `<code>font=${state.font}</code> ` +
+      `<code>bg=${state.bg}</code> ` +
+      `<code>card=${state.card}</code> ` +
+      `<code>size=${state.size}</code>`;
+    try { localStorage.setItem('blogStylePreview', JSON.stringify(state)); } catch (e) {}
+  }
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('blogStylePreview'));
+    if (saved) {
+      Object.assign(state, saved);
+      document.querySelectorAll('.options').forEach(group => {
+        const axis = group.dataset.axis;
+        group.querySelectorAll('.option').forEach(b => {
+          b.classList.toggle('active', b.dataset.value === state[axis]);
+        });
+      });
+    }
+  } catch (e) {}
+
+  document.querySelectorAll('.options').forEach(group => {
+    const axis = group.dataset.axis;
+    group.addEventListener('click', e => {
+      const btn = e.target.closest('.option');
+      if (!btn) return;
+      group.querySelectorAll('.option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state[axis] = btn.dataset.value;
+      applyState();
+    });
+  });
+
+  toggleBtn.addEventListener('click', () => {
+    panel.classList.toggle('collapsed');
+    toggleBtn.textContent = panel.classList.contains('collapsed') ? 'Expand' : 'Collapse';
+    applyState();
+  });
+
+  applyState();
+</script>
+
+</body>
+</html>

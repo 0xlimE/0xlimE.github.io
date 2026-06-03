@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313//favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313//favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313//favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313//android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313//apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Getting unlimited free GLS/BRING package labels but not for a bounty :o) | 0xlime Blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/trackingpackage/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/trackingpackage/">
+  <meta property="og:site_name" content="0xlime Blog">
+  <meta property="og:title" content="Getting unlimited free GLS/BRING package labels but not for a bounty :o)">
+  <meta property="og:description" content="Recently I was doing Bug Bounty hunting on a private program that I really enjoy hacking on! It is a marketplace app that allows creating listings, sending messages and if you agree on a deal: buy package labels for quick shipping of that Pink Floyd record you sold for 39dkk ;-)
+Anyway, the main app exists at https://marketplace-app.dk (cover of course), where going through the purchase flow of shipping labels worked pretty nice and was secure.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-08-21T11:17:42+02:00">
+    <meta property="article:modified_time" content="2024-08-21T11:17:42+02:00">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.b47068eb723e0d6f9b88b80d7b53d1a25a5b0e45c3e147c9d878f4b83cc6bc80.css" media="all">
+
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="light">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">0xlime Blog</a>
+    </h1>
+
+    <div class="flex">
+        
+
+        
+        
+      
+        <p class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="/presentations" >
+                /presentations
+            </a>
+        </p>
+        
+      
+        <p class="small ">
+            <a href="https://r4.dk" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+
+<div class="breadcrumbs">
+    
+    <a href="/">Home</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a href="/posts/">Posts</a>
+    <span class="breadcrumbs-separator"> > </span>
+    
+    <a class="breadcrumbs-current" href="/posts/trackingpackage/">Getting unlimited free GLS/BRING package labels but not for a bounty :o)</a>
+</div>
+
+
+
+<div >
+
+  <div class="single-intro-container">
+
+    
+
+    <h1 class="single-title">Getting unlimited free GLS/BRING package labels but not for a bounty :o)</h1>
+    
+
+    
+
+    <p class="single-readtime">
+      
+      
+      
+      <time datetime="2024-08-21T11:17:42&#43;02:00">August 21, 2024</time>
+      
+
+      
+    </p>
+
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div class="single-content">
+    <p>Recently I was doing Bug Bounty hunting on a private program that I really enjoy hacking on! It is a marketplace app that allows creating listings, sending messages and if you agree on a deal: buy package labels for quick shipping of that Pink Floyd record you sold for 39dkk ;-)</p>
+<p>Anyway, the main app exists at <a href="https://marketplace-app.dk">https://marketplace-app.dk</a> (cover of course), where going through the purchase flow of shipping labels worked pretty nice and was secure.</p>
+<p>However there was also a subdomain for QA testing, at <a href="https://qa01.marketplace-app.dk/">https://qa01.marketplace-app.dk/</a>, a complete copy of the main app, just with testing data. I signed up for an account here and poked around, and tried to go through the flow of buying a package label and was greeted with this screen:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/trackingpackage/pcakagelabel.png" width="798px" height="844px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Alright sure, let me just try to put in the test credit card and see what happens. So I did this and actually got a checkout screen:</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/trackingpackage/acceptedpackage.png" width="1450px" height="898px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Doing the same with GLS, setting my own mail as the recipient, I actually got an email from GLS lol:
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/trackingpackage/guenagnueia.png" width="1888px" height="1062px">
+    </div>
+
+    
+</figure>
+</p>
+<p>Triage did not really buy it initially, they said they thought this was just test labels and that there was no actual registry at GLS or the other logistics companies. So in order to hunt this bounty I actually went out and sent myself an empty package lol
+
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/trackingpackage/packagesent.png" width="1256px" height="1584px">
+    </div>
+
+    
+</figure>
+</p>
+<p>I got a receipt on SMS that I handed in the package</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/trackingpackage/smsfromgls.png" width="945px" height="2048px">
+    </div>
+
+    
+</figure>
+</p>
+<p>So I waited a few days to pick up my own empty box and let the triage know, they understood it and changed the potential payout ;-)</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/trackingpackage/triage2222.png" width="1546px" height="596px">
+    </div>
+
+    
+</figure>
+</p>
+<p>So it went on to the customer who mentioned they wanted to investigate, but in bug bounty it does not always go the direction you want, and it was marked as an accepted risk, oh well!</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div>
+        <img loading="lazy" alt="alt text" src="/posts/trackingpackage/finaldecision2.png" width="1382px" height="244px">
+    </div>
+
+    
+</figure>
+</p>
+
+    
+  </div>
+
+  
+
+
+  
+
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  <footer>
+    
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+
+</body>
+
+<script>
+
+  function isAuto() {
+    return document.body.classList.contains("auto");
+  }
+
+  function setTheme() {
+    if (!isAuto()) {
+      return
+    }
+
+    document.body.classList.remove("auto");
+    let cls = "light";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      cls = "dark";
+    }
+
+    document.body.classList.add(cls);
+  }
+
+  function invertBody() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  if (isAuto()) {
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(invertBody);
+  }
+
+  setTheme();
+
+</script>
+
+<script defer src="/js/copy-code.js"></script>
+</html>

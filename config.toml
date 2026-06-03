@@ -26,13 +26,13 @@ description = "Security Research and Bug Hunting"
 
 # Appearance settings
 colorPalette = 'default'
+theme = 'light'
 hideHeader = false
 
 # Intro on main page, content is markdown
 homeIntroTitle = 'Welcome to 0xlime Blog!'
 homeIntroContent = """
-Security Researcher and Bug Hunter sharing insights on cybersecurity, 
-vulnerability research, and ethical hacking techniques.
+My name is Emil Hørning and I am a security researcher and bug bounty hunter! I also work as the Head of Hackers at [Defend Denmark](https://defenddenmark.dk/).
 """
 
 # Collection to display on home
@@ -54,6 +54,10 @@ author = "0xlime"
 [[params.social]]
 name = "github"
 url = "https://github.com/0xlime"
+
+[[params.social]]
+name = "linkedin"
+url = "https://www.linkedin.com/in/emil-h%C3%B8rning-8824641b4/"
 
 [[params.social]]
 name = "link"

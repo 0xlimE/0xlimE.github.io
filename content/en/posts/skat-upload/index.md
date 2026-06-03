@@ -3,7 +3,7 @@ layout: post
 title:  "Path traversal vulnerability on info.skat.dk"
 date:   2025-05-26 16:17:42 +0200
 categories: security-research
-draft: true
+draft: false
 ---
 ### Preface
 I do not endorse performing unsolicited or unauthorized security testing of websites or systems. This article describes a situation where a friend shared an error message they encountered while legitimately using a service, which contained indicators suggesting a potential security vulnerability. Looking closer, this proved to be the case.

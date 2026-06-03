@@ -6,8 +6,29 @@
     <description>Recent content in Posts on 0xlime Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 24 Jun 2025 11:17:42 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 29 Mar 2026 11:17:42 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Announcing security-txt.dk to track Danish companies security.txt adoption</title>
+      <link>http://localhost:1313/posts/security-txt-website/</link>
+      <pubDate>Sun, 29 Mar 2026 11:17:42 +0200</pubDate>
+      <guid>http://localhost:1313/posts/security-txt-website/</guid>
+      <description>&lt;p&gt;Since I did my research on .dk domains and security.txt, and with Claude Code superpowering my frontend skills (lol thank god), I wanted to build a dashboard to showcase how it&amp;rsquo;s really going in Denmark.&lt;/p&gt;&#xA;&lt;p&gt;So I took the data and made a site to track it: &lt;a href=&#34;https://security-txt.dk/&#34;&gt;https://security-txt.dk/&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&#xA;&lt;figure class=&#34;&#34;&gt;&#xA;&#xA;    &lt;div&gt;&#xA;        &lt;img loading=&#34;lazy&#34; alt=&#34;Denmark security txt&#34; src=&#34;http://localhost:1313/posts/security-txt-website/securitytxtdenmark.png&#34; width=&#34;2250px&#34; height=&#34;1618px&#34;&gt;&#xA;    &lt;/div&gt;&#xA;&#xA;    &#xA;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&lt;p&gt;Essentially I narrowed down around 30k Danish companies from the CVR register and tried to find their websites. Using that (with some false positives), I checked how many companies expose a security.txt and a VDP (Vulnerability Disclosure Policy).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>On moltbook</title>
+      <link>http://localhost:1313/posts/onmoltbook/</link>
+      <pubDate>Sat, 14 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/onmoltbook/</guid>
+      <description>&lt;p&gt;Okay so there is a lot of both AI hype and FUD going around these days. The whole discourse around Moltbook and AI&amp;rsquo;s getting their own social media to rant about humans is really confirming my view that IT Security is more important now than ever.&lt;/p&gt;&#xA;&lt;p&gt;Tons of new developers, tech interested folks, etc. have thrown themselves at this new AI bot (clawdbot -&amp;gt; moltbot -&amp;gt; openclaw) that has the possibility to integrate with a social media &amp;ldquo;only for agents&amp;rdquo;. Here humans are allegedly only allowed to observe, while the AIs talk with each other.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Scanning .dk domains for react2shell</title>
+      <link>http://localhost:1313/posts/react2shelldk/</link>
+      <pubDate>Tue, 09 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/react2shelldk/</guid>
+      <description>&lt;p&gt;Yesterday — Sunday evening — was spent alerting Danish companies that they were vulnerable to &lt;strong&gt;React2shell&lt;/strong&gt; (&lt;code&gt;CVE-2025-55182&lt;/code&gt; and &lt;code&gt;CVE-2025-66478&lt;/code&gt;), a recently dropped CVSS 10.0 vulnerability affecting a large portion of websites on the internet, with observed active exploitation already in the wild (&lt;a href=&#34;https://react2shell.com/&#34;&gt;react2shell.com&lt;/a&gt;).&lt;/p&gt;&#xA;&lt;p&gt;What does this mean in practice? It means that if your webpage is vulnerable, then there is a decent chance that your site has been, or soon will be, compromised. I am not trying to paint a scary scenario for hype — the scripts to obtain remote code execution on a vulnerable site are already out there, and they are being used.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Analysis of security.txt Adoption Across .dk Domains</title>
       <link>http://localhost:1313/posts/securitytxt/</link>
@@ -49,6 +70,13 @@
       <pubDate>Sun, 02 Feb 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/ready_bug_bounty1/</guid>
       <description>&lt;p&gt;&lt;em&gt;&lt;strong&gt;This post was originally made for the bugbounty subreddit that I lurk extensively, see it here&lt;/strong&gt;&lt;/em&gt;: &lt;a href=&#34;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&#34;&gt;https://www.reddit.com/r/bugbounty/comments/1i2k79f/a_fundamental_misunderstanding_on_when_you_are/&lt;/a&gt;&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;This question comes up so often on this subreddit:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&amp;ldquo;When am I ready for BBH?&amp;rdquo;&lt;/li&gt;&#xA;&lt;li&gt;&amp;ldquo;Okay, after finishing CBBH, am I then ready for bug bounty hunting?&amp;rdquo;&lt;/li&gt;&#xA;&lt;li&gt;&amp;ldquo;I&amp;rsquo;ve studied intricate dynamic analysis of JavaScript in my PhD at MIT, am I ready for bug bounty hunting?&amp;rdquo;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;These questions all have the same answer: &lt;strong&gt;You are ready for bug bounty hunting when you have signed up on a platform and have agreed with the terms of the program.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Getting unlimited free GLS/BRING package labels but not for a bounty :o)</title>
+      <link>http://localhost:1313/posts/trackingpackage/</link>
+      <pubDate>Wed, 21 Aug 2024 11:17:42 +0200</pubDate>
+      <guid>http://localhost:1313/posts/trackingpackage/</guid>
+      <description>&lt;p&gt;Recently I was doing Bug Bounty hunting on a private program that I really enjoy hacking on! It is a marketplace app that allows creating listings, sending messages and if you agree on a deal: buy package labels for quick shipping of that Pink Floyd record you sold for 39dkk ;-)&lt;/p&gt;&#xA;&lt;p&gt;Anyway, the main app exists at &lt;a href=&#34;https://marketplace-app.dk&#34;&gt;https://marketplace-app.dk&lt;/a&gt; (cover of course), where going through the purchase flow of shipping labels worked pretty nice and was secure.&lt;/p&gt;</description>
     </item>
     <item>
       <title>TDC NET CTF 2023 - clone2own - pokemon1</title>
